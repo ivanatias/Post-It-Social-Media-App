@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&display=swap");
+
+/*******************VARIABLES*****************/
+
+/****Colors*****/
+$color-black: #1d1a1a;
+$color-darkgray: #413a3a;
+$color-brand: #fa8072;
+$color-lightgray: #bcb3b3;
+$color-white: #fff;
+/******Spacing*******/
+$space-1: 0.5rem;
+$space-2: 1rem;
+$space-3: 1.5rem;
+$space-4: 2rem;
+$space-5: 2.5rem;
+$space-6: 3rem;
+$space-7: 3.5rem;
+$space-8: 4rem;
+
+/************RESET CSS**************/
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Red Hat Display", sans-serif;
+}
+
+/************UTILITY CLASSES*********/
+
+.app__flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.head-text {
+  font-size: 3rem;
+  color: $color-white;
+  font-weight: 800;
+
+  @media screen and (min-width: 2000px) {
+    font-size: 3rem;
+  }
+
+  @media screen and (max-width: 1000px) {
+    font-size: 2rem;
+  }
+}
+
+.p-text {
+  font-size: 1rem;
+  color: $color-lightgray;
+
+  @media screen and (min-width: 2000px) {
+    font-size: 1.5rem;
+  }
+}
+
+.small-p-text {
+  font-size: 0.8rem;
+  color: $color-lightgray;
+
+  @media screen and (min-width: 2000px) {
+    font-size: 1.25rem;
+  }
+}
+
+/**************BODY STYLE*****************/
+
+body {
+  background-color: $color-black;
+}
