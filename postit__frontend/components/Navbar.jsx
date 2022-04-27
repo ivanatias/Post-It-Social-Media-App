@@ -1,7 +1,16 @@
 import React from "react";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
-  return <div>Navbar</div>;
+  const router = useRouter();
+
+  return (
+    <>
+      {router.pathname !== "/login" && (
+        <div className="text-xl text-white">Navbar</div>
+      )}
+    </>
+  );
 };
 
 export default Navbar;

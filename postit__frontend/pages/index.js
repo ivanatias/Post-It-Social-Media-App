@@ -1,8 +1,10 @@
+import { Layout } from "../components";
+
 const Home = () => {
   return (
-    <div>
-      <h1 className="head-text">Main page</h1>
-    </div>
+    <Layout>
+      <h1 className="text-xl font-bold underline"> Main Page </h1>
+    </Layout>
   );
 };
 
