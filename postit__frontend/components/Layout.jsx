@@ -7,7 +7,11 @@ const Layout = ({ children }) => {
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div
+      className={`${
+        router.pathname !== "/login" && "flex"
+      } min-h-screen bg-black`}
+    >
       {router.pathname !== "/login" && (
         <div className="hidden md:flex">
           <Sidebar />
