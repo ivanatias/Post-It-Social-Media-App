@@ -1,13 +1,54 @@
 import React from "react";
-import { Layout } from "../components";
+import Image from "next/image";
+
+import GoogleLogin from "react-google-login";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
+  const responseGoogle = (response) => {
+    console.log(response);
+  };
+
   return (
-    <Layout>
-      <div>
-        <h1 className="head-text">Login</h1>
+    <div className="flex flex-col items-center justify-center h-screen bg-black">
+      <div className="relative w-full h-full">
+        <video
+          src="/PostItvideo2.mp4"
+          type="video/mp4"
+          loop
+          controls={false}
+          muted
+          autoPlay
+          className="object-cover w-full h-full brightness-50"
+        />
+
+        <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col items-center justify-center">
+          <div className="p-3">
+            <Image
+              src="/Postit-logofull.svg"
+              width={140}
+              height={80}
+              alt="logo"
+            />
+          </div>
+          <GoogleLogin
+            clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
+            render={(renderProps) => (
+              <button
+                className="flex items-center justify-center px-8 py-3 text-lg font-bold text-black bg-white border-none rounded-lg outline-none cursor-pointer"
+                onClick={renderProps.onClick}
+                type="button"
+              >
+                <FcGoogle size={21} className="mr-2" /> Sign in with Google
+              </button>
+            )}
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy="single_host_origin"
+          />
+        </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 
