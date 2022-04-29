@@ -4,9 +4,29 @@ import Image from "next/image";
 import GoogleLogin from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
 
+import { useRouter } from "next/router";
+
+import axios from "axios";
+
 const Login = () => {
+  const router = useRouter();
+
+  const apiUserLogin = (userName, userId, userImage) => {
+    axios
+      .post(
+        `/api/users/login?name=${userName}&googleId=${userId}&imageUrl=${userImage}`
+      )
+      .then(() => {
+        router.replace("/");
+      });
+  };
+
   const responseGoogle = (response) => {
-    console.log(response);
+    localStorage.setItem("user", JSON.stringify(response.profileObj));
+
+    const { name, googleId, imageUrl } = response.profileObj;
+
+    apiUserLogin(name, googleId, imageUrl);
   };
 
   return (
@@ -35,9 +55,9 @@ const Login = () => {
             clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
             render={(renderProps) => (
               <button
+                type="button"
                 className="flex items-center justify-center px-8 py-3 text-lg font-bold text-black bg-white border-none rounded-lg outline-none cursor-pointer"
                 onClick={renderProps.onClick}
-                type="button"
               >
                 <FcGoogle size={21} className="mr-2" /> Sign in with Google
               </button>
