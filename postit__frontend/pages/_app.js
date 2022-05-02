@@ -1,11 +1,13 @@
-import { Layout } from "../components";
+import React from "react";
+import { AppContext } from "../context/context";
+
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
+    <AppContext>
       <Component {...pageProps} />
-    </Layout>
+    </AppContext>
   );
 }
 

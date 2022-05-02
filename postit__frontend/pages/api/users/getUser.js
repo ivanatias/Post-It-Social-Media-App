@@ -1,20 +1,16 @@
 import { client } from "../../../client/client";
 
+import { userQuery } from "../../../utils/data";
+
 module.exports = async (req, res) => {
   try {
-    const { name, googleId, imageUrl } = req.query;
+    const { googleId } = req.query;
+    const query = userQuery(googleId);
 
-    const doc = {
-      _type: "user",
-      _id: googleId,
-      userName: name,
-      image: imageUrl,
-    };
-
-    client.createIfNotExists(doc);
+    const data = await client.fetch(query);
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
-    res.send("User logged in / created");
+    res.end(JSON.stringify(data));
   } catch (error) {
     res.json(error);
     res.status(405).end();
