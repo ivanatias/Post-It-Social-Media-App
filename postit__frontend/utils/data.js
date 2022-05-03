@@ -3,7 +3,29 @@ export const userQuery = (userId) => {
   return query;
 };
 
-export const categoriesQuery = () => {
-  const query = `*[_type == "category"]`;
-  return query;
-};
+export const categories = [
+  {
+    name: "Technology",
+  },
+  {
+    name: "Animals",
+  },
+  {
+    name: "Cars",
+  },
+  {
+    name: "Food",
+  },
+  {
+    name: "Travel",
+  },
+  {
+    name: "Sports",
+  },
+  {
+    name: "Nature",
+  },
+  {
+    name: "Art",
+  },
+];

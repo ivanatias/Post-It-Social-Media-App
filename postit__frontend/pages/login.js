@@ -6,20 +6,10 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useRouter } from "next/router";
 
-import axios from "axios";
+import { apiUserLogin } from "../utils/api";
 
 const Login = () => {
   const router = useRouter();
-
-  const apiUserLogin = async (userName, userId, userImage) => {
-    try {
-      axios.post(
-        `/api/users/login?name=${userName}&googleId=${userId}&imageUrl=${userImage}`
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const responseGoogle = (response) => {
     localStorage.setItem("user", JSON.stringify(response.profileObj));
