@@ -10,14 +10,14 @@ const Home = () => {
   return (
     <Layout>
       <button
-        className="bg-white text-black font-extrabold"
+        className="font-extrabold text-black bg-white"
         type="button"
         onClick={handleUserLogout}
       >
         Logout
       </button>
       <Link href="/search">
-        <p className="text-white text-xl cursor-pointer">Go to search</p>
+        <p className="text-xl text-white cursor-pointer">Go to search</p>
       </Link>
     </Layout>
   );

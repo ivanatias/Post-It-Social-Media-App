@@ -5,8 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { categories } from "../utils/data";
 
-import { useUser } from "../hooks/useUser";
-
 const activeLink = "text-red-600 font-extrabold";
 
 const NavLink = ({ href, children, closeSidebar }) => {
@@ -26,19 +24,22 @@ const NavLink = ({ href, children, closeSidebar }) => {
 };
 
 const Sidebar = ({ closeSidebar }) => {
-  const { user } = useUser();
+  const userInfo =
+    localStorage.getItem("user") !== "undefined"
+      ? JSON.parse(localStorage.getItem("user"))
+      : localStorage.clear();
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-full px-5 py-5 overflow-y-auto shadow-md bg-neutral-900 md:h-screen shadow-gray-100 md:w-56 ">
       <div className="flex items-center justify-center w-20 h-20 rounded-full">
-        {user?.image && (
+        {userInfo?.imageUrl && (
           <NavLink
-            href={`/user-profile/${user?._id}`}
+            href={`/user-profile/${userInfo?.googleId}`}
             closeSidebar={closeSidebar}
           >
             <Image
               alt="User Avatar Image"
-              src={user?.image}
+              src={userInfo?.imageUrl}
               width={80}
               height={80}
               objectFit="cover"
@@ -48,11 +49,11 @@ const Sidebar = ({ closeSidebar }) => {
         )}
       </div>
       <h1 className="mt-3 text-xl font-bold text-center text-white ">
-        {user?.userName}
+        {`${userInfo?.givenName} ${userInfo?.familyName}`}
       </h1>
       <div className="mt-3 text-sm font-semibold text-gray-200">
         <NavLink
-          href={`/user-profile/${user?._id}`}
+          href={`/user-profile/${userInfo?.googleId}`}
           closeSidebar={closeSidebar}
         >
           Profile
