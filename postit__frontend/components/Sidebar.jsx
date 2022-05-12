@@ -30,7 +30,7 @@ const Sidebar = ({ closeSidebar }) => {
       : localStorage.clear();
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full px-5 py-5 overflow-y-auto shadow-md bg-neutral-900 md:h-screen shadow-gray-100 md:w-56 ">
+    <div className="flex flex-col items-center justify-center w-full h-full p-5 overflow-y-auto shadow-md bg-neutral-900 md:h-screen shadow-gray-100 md:w-56 md:justify-start ">
       <div className="flex items-center justify-center w-20 h-20 rounded-full">
         {userInfo?.imageUrl && (
           <NavLink
