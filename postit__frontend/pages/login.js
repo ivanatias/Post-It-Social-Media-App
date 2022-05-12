@@ -11,13 +11,15 @@ import { apiUserLogin } from "../utils/api";
 const Login = () => {
   const router = useRouter();
 
+  //Add OnFailure function if login is not succesful...
+
   const responseGoogle = (response) => {
     localStorage.setItem("user", JSON.stringify(response.profileObj));
 
-    const { name, googleId, imageUrl } = response.profileObj;
+    const { name, googleId, imageUrl } = response?.profileObj;
 
     apiUserLogin(name, googleId, imageUrl).then(() => {
-      router.push("/");
+      router.replace("/");
     });
   };
 

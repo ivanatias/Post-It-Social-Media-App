@@ -16,7 +16,7 @@ export const AppContext = ({ children }) => {
         : null;
 
     if (router.pathname !== "/login" && !userInfo) {
-      router.push("/login");
+      router.replace("/login");
       setTimeout(() => {
         setIsLoading(false);
       }, 1500);
@@ -27,7 +27,7 @@ export const AppContext = ({ children }) => {
     }
 
     if (router.pathname === "/login" && userInfo) {
-      router.push("/");
+      router.replace("/");
       setTimeout(() => {
         setIsLoading(false);
       }, 250);
