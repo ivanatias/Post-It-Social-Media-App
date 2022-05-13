@@ -38,6 +38,7 @@ export const postsQuery = () => {
       }
     },
     _id,
+    title,
     postedBy -> {
       _id,
       userName,
