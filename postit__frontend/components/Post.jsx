@@ -9,7 +9,7 @@ import {
   AiOutlineSave,
 } from "react-icons/ai";
 
-const Post = ({ post: { image, postedBy, _id } }) => {
+const Post = ({ post: { title, image, postedBy, _id } }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
 
@@ -25,7 +25,7 @@ const Post = ({ post: { image, postedBy, _id } }) => {
             alt="User avatar"
             className="object-cover w-8 h-8 rounded-full"
           />
-          <div className="text-sm font-bold text-white lg:text-base">
+          <div className="text-sm font-bold text-white xl:text-base">
             {postedBy?.userName}
           </div>
         </div>
@@ -79,6 +79,9 @@ const Post = ({ post: { image, postedBy, _id } }) => {
           alt="post"
         />
       </div>
+      <p className="my-3 text-sm font-semibold text-white xl:text-base">
+        {title}
+      </p>
     </div>
   );
 };
