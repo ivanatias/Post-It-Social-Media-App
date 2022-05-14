@@ -4,17 +4,17 @@ import Masonry from "react-masonry-css";
 
 const breakpointColumnsObj = {
   default: 4,
-  3000: 6,
+  3000: 5,
   2000: 4,
-  1200: 3,
+  1440: 3,
   1000: 2,
-  500: 1,
+  540: 1,
 };
 
 const Posts = ({ posts }) => {
   return (
     <Masonry
-      className="flex w-full px-4 py-3 md:px-8 lg:px-10"
+      className="flex w-full h-full"
       breakpointCols={breakpointColumnsObj}
     >
       {posts?.map((post) => (
