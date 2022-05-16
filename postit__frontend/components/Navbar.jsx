@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-20 flex items-center justify-between w-full gap-3 px-6 py-3 bg-black md:px-10 lg:px-12">
+    <nav className="sticky top-0 z-20 flex items-center justify-between w-full gap-3 px-6 py-3 bg-black/20 backdrop-blur-md md:px-10 lg:px-12">
       <HiMenu
         fontSize={30}
         className="text-white cursor-pointer md:hidden"
