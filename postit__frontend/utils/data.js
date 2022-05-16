@@ -23,6 +23,9 @@ export const categories = [
   {
     name: "Art",
   },
+  {
+    name: "Other",
+  },
 ];
 
 export const userQuery = (userId) => {
@@ -42,7 +45,8 @@ export const postsQuery = () => {
     postedBy -> {
       _id,
       userName,
-      image
+      image,
+      userTag,
     },
     save[] {
       _key,

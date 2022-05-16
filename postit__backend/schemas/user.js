@@ -13,5 +13,10 @@ export default {
       title: "User Image",
       type: "string",
     },
+    {
+      name: "userTag",
+      title: "User Tag",
+      type: "string",
+    },
   ],
 };

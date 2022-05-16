@@ -28,7 +28,7 @@ body {
 .post__image {
   object-fit: cover;
   width: 100% !important;
-  min-height: 250px !important;
+  /* min-height: 250px !important; */
   position: relative !important;
   height: unset !important;
 }

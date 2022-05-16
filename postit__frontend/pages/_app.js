@@ -1,12 +1,12 @@
 import React from "react";
-import { AppContext } from "../context/context";
 import { ToastContainer } from "react-toastify";
+import { SessionProvider } from "next-auth/react";
 
 import "../styles/globals.css";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <AppContext>
+    <SessionProvider session={session}>
       <Component {...pageProps} />
       <ToastContainer
         position="bottom-right"
@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
         draggable
         pauseOnHover
       />
-    </AppContext>
+    </SessionProvider>
   );
 }
 

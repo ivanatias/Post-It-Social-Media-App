@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { useRouter } from "next/router";
 import { categories } from "../utils/data";
+import { useSession } from "next-auth/react";
 
 const activeLink = "text-red-600 font-extrabold";
 
@@ -12,7 +13,7 @@ const NavLink = ({ href, children, closeSidebar }) => {
   return (
     <Link href={href} passHref>
       <a
-        className={`transition-all duration-100 ease-in-out hover:text-red-500 ${
+        className={`transition-all duration-100 ease-in-out hover:text-red-500 last:mt-2 ${
           router.pathname === href && activeLink
         }`}
         onClick={closeSidebar}
@@ -24,22 +25,19 @@ const NavLink = ({ href, children, closeSidebar }) => {
 };
 
 const Sidebar = ({ closeSidebar }) => {
-  const userInfo =
-    localStorage.getItem("user") !== "undefined"
-      ? JSON.parse(localStorage.getItem("user"))
-      : localStorage.clear();
+  const { data: session } = useSession();
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-5 overflow-y-scroll shadow-md hide-scrollbar bg-neutral-900 md:h-screen shadow-gray-100 md:shadow-none md:w-56 md:justify-start ">
       <div className="flex items-center justify-center w-20 h-20 rounded-full">
-        {userInfo?.imageUrl && (
+        {session?.user?.image && (
           <NavLink
-            href={`/user-profile/${userInfo?.googleId}`}
+            href={`/user-profile/${session?.user?.uid}`}
             closeSidebar={closeSidebar}
           >
             <Image
               alt="User Avatar Image"
-              src={userInfo?.imageUrl}
+              src={session?.user.image}
               width={80}
               height={80}
               objectFit="cover"
@@ -49,11 +47,11 @@ const Sidebar = ({ closeSidebar }) => {
         )}
       </div>
       <h1 className="mt-3 text-xl font-bold text-center text-white ">
-        {`${userInfo?.givenName} ${userInfo?.familyName}`}
+        {session?.user?.name}
       </h1>
       <div className="mt-3 text-sm font-semibold text-gray-200">
         <NavLink
-          href={`/user-profile/${userInfo?.googleId}`}
+          href={`/user-profile/${session?.user?.uid}`}
           closeSidebar={closeSidebar}
         >
           Profile
@@ -68,7 +66,7 @@ const Sidebar = ({ closeSidebar }) => {
         <h2 className="mb-3 text-xl font-bold text-white">
           Discover categories
         </h2>
-        <div className="flex flex-col items-center justify-center w-full gap-1 font-semibold text-gray-200">
+        <div className="flex flex-col items-center justify-center w-full gap-2 font-semibold text-gray-200">
           {categories.map((category) => (
             <NavLink
               key={category.name}
