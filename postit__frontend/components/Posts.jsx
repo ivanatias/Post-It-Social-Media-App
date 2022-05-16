@@ -3,12 +3,12 @@ import { Post } from "./index";
 import Masonry from "react-masonry-css";
 
 const breakpointColumnsObj = {
-  default: 4,
+  default: 5,
   3000: 5,
   2000: 4,
-  1440: 3,
-  1000: 2,
-  540: 1,
+  1600: 3,
+  1200: 2,
+  640: 1,
 };
 
 const Posts = ({ posts }) => {
