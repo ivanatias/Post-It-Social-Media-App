@@ -1,25 +1,12 @@
-import React, { useContext } from "react";
-import { Context } from "../context/context";
+import React from "react";
 
 import { Layout, Posts } from "../components";
 import { client } from "../client/client";
 import { postsQuery } from "../utils/data";
-import { useUser } from "../hooks/useUser";
+
+import { getSession } from "next-auth/react";
 
 const Home = ({ posts }) => {
-  const { user, userSession } = useUser();
-
-  console.log(posts);
-
-  //Create a "No Authorized" component and display it when the userAuth Cookie is not available.
-  if (!userSession) {
-    return (
-      <div className="grid min-h-screen place-content-center">
-        No User Session
-      </div>
-    );
-  }
-
   return (
     <Layout>
       <section className="w-full px-4 py-4 md:px-8 lg:px-10">
@@ -29,7 +16,27 @@ const Home = ({ posts }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const doc = {
+    _type: "user",
+    _id: session.user.uid,
+    userName: session.user.name,
+    image: session.user.image,
+    userTag: session.user.tag,
+  };
+
+  await client.createIfNotExists(doc);
   const query = postsQuery();
   const posts = await client.fetch(query);
 
