@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
-import {
-  AiOutlineDownload,
-  AiOutlineDelete,
-  AiOutlineEye,
-  AiOutlineSave,
-} from "react-icons/ai";
 
+import ConfirmModal from "./ConfirmModal";
+import Dropdown from "./Dropdown";
 import axios from "axios";
+
+import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Post = ({ post: { title, image, postedBy, _id, save } }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [postDeleted, setPostDeleted] = useState(false);
 
@@ -40,11 +38,11 @@ const Post = ({ post: { title, image, postedBy, _id, save } }) => {
   return (
     <>
       {postDeleted ? (
-        <div className="grid w-full text-base font-bold text-white 3xl:text-lg h-1/3 place-content-center">
+        <div className="grid w-full text-sm font-bold text-white 2xl:text-base h-1/3 place-content-center">
           Post deleted
         </div>
       ) : (
-        <div className="relative m-3">
+        <div className="relative p-3 transition duration-300 ease-in-out hover:shadow-md hover:shadow-gray-600">
           <div className="flex items-center justify-between w-full mb-3">
             <div
               className="flex items-center gap-2 cursor-pointer"
@@ -55,8 +53,8 @@ const Post = ({ post: { title, image, postedBy, _id, save } }) => {
                 alt="User avatar"
                 className="object-cover w-8 h-8 rounded-full"
               />
-              <div className="text-sm font-bold text-white 3xl:text-lg">
-                {postedBy?.userName}
+              <div className="text-sm font-bold text-white 2xl:text-base">
+                {postedBy?.userTag}
               </div>
             </div>
             <div
@@ -71,51 +69,33 @@ const Post = ({ post: { title, image, postedBy, _id, save } }) => {
             </div>
           </div>
           {dropdownOpen && (
-            <div className="absolute z-10 flex flex-col gap-2 p-3 bg-white rounded-md right-2 top-14">
-              <a
-                className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out rounded-md shadow-md cursor-pointer lg:text-sm hover:bg-gray-100"
-                href={`${image?.asset?.url}?dl=`}
-                download
-                onClick={() => setDropdownOpen(false)}
-              >
-                <AiOutlineDownload fontSize={16} />
-                <p>Download</p>
-              </a>
-              <div className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out rounded-md shadow-md cursor-pointer lg:text-sm hover:bg-gray-100">
-                <AiOutlineSave fontSize={16} />
-                <p>Save</p>
-              </div>
-              <div
-                className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out rounded-md shadow-md cursor-pointer lg:text-sm hover:bg-gray-100"
-                onClick={() => {
-                  setDropdownOpen(false);
-                  router.push(`/post/${_id}`);
-                }}
-              >
-                <AiOutlineEye fontSize={16} />
-                <p>Post Details</p>
-              </div>
-              <div
-                className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out rounded-md shadow-md cursor-pointer lg:text-sm hover:bg-gray-100"
-                onClick={() => deletePost(_id)}
-              >
-                <AiOutlineDelete fontSize={16} />
-                <p>Delete</p>
-              </div>
-            </div>
+            <Dropdown
+              setDropdownOpen={setDropdownOpen}
+              setOpenModal={setOpenModal}
+              postedBy={postedBy}
+              postImage={image}
+              postId={_id}
+            />
           )}
           <div className="relative post__image-container">
             <Image
               src={image?.asset?.url}
+              placeholder="blur"
+              blurDataURL={image?.asset?.url}
               layout="fill"
               className="rounded-lg post__image"
               alt="post"
             />
           </div>
-          <p className="my-3 text-sm font-semibold text-white 3xl:text-lg">
-            {title}
-          </p>
+          <p className="mt-3 text-sm text-white 2xl:text-base">{title}</p>
         </div>
+      )}
+      {openModal && (
+        <ConfirmModal
+          setOpenModal={setOpenModal}
+          deletePost={deletePost}
+          postId={_id}
+        />
       )}
     </>
   );
