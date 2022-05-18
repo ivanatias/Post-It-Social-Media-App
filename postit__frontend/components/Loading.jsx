@@ -1,18 +1,9 @@
 import React from "react";
 
-const initialPageLoadClass =
-  "flex flex-col h-screen w-full bg-black text-gray-300 items-center justify-center";
-
-const normalSpinnerLoadClass =
-  "flex flex-col justify-center items-center h-full w-full text-gray-300";
-
-const Loading = ({ isInitialLoad, message }) => {
+const Loading = () => {
   return (
-    <div
-      className={isInitialLoad ? initialPageLoadClass : normalSpinnerLoadClass}
-    >
-      <div className="w-24 h-24 rounded-full bg-gray-100 border-l-8 border-l-red-500 animate-spin mb-6"></div>
-      <div className="text-2xl text-gray-300 font-semibold">{message}</div>
+    <div className="fixed top-0 left-0 z-50 grid w-full h-full bg-black/40 place-content-center">
+      <div className="relative md:left-[112px] w-8 h-8 border-4 border-red-500 rounded-full border-l-transparent 2xl:w-10 2xl:h-10 animate-spin"></div>
     </div>
   );
 };
