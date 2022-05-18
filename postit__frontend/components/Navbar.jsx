@@ -21,7 +21,7 @@ const Navbar = () => {
         className="text-white cursor-pointer md:hidden"
         onClick={() => setShowSidebar(true)}
       />
-      <Link href="/">
+      <Link href="/" passHref>
         <a>
           <Image src="/Postit-logofull.svg" width={140} height={80} />
         </a>
