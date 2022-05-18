@@ -4,7 +4,7 @@ module.exports = async (req, res) => {
   if (req.method === "POST") {
     try {
       const { postId } = req.body;
-      client.delete(postId);
+      await client.delete(postId);
       res.status(200).json({
         message: "Post succesfully deleted",
       });
