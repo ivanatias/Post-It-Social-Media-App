@@ -2,10 +2,10 @@ import React from "react";
 
 //Control dynamically where the ConfirmModal will appear depending of the height at which the client is.
 
-const ConfirmModal = ({ setOpenModal, deletePost, postId }) => {
+const ConfirmModal = ({ setOpenModal, deletePost, postId, refreshData }) => {
   return (
     <div className="fixed top-0 left-0 z-50 grid w-full h-full bg-black/40 place-content-center">
-      <div className="flex flex-col items-center justify-center w-full max-w-md p-5 text-black shadow-md bg-neutral-900 rounded-2xl">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-md p-5 text-black shadow-md md:left-[112px] bg-neutral-900 rounded-2xl">
         <p className="font-bold text-white text-md 2xl:text-lg">
           Do you want to delete your post?
         </p>
@@ -21,6 +21,7 @@ const ConfirmModal = ({ setOpenModal, deletePost, postId }) => {
             onClick={() => {
               deletePost(postId);
               setOpenModal(false);
+              refreshData();
             }}
           >
             Delete
