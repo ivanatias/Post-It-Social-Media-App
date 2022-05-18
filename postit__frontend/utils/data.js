@@ -48,7 +48,7 @@ export const postsQuery = () => {
       image,
       userTag,
     },
-    save[] {
+    saved[] {
       _key,
       postedBy -> {
         _id,
