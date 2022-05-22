@@ -23,7 +23,12 @@ const Navbar = () => {
       />
       <Link href="/" passHref>
         <a>
-          <Image src="/Postit-logofull.svg" width={140} height={80} />
+          <Image
+            src="/Postit-logofull.svg"
+            width={140}
+            height={80}
+            alt="Logo"
+          />
         </a>
       </Link>
 

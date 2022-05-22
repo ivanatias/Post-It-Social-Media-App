@@ -19,7 +19,6 @@ const Dropdown = ({
   saving,
   unsaving,
   alreadySaved,
-  refreshData,
 }) => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -37,12 +36,9 @@ const Dropdown = ({
       </a>
       <button
         className={`flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out border-none rounded-md shadow-md outline-none cursor-pointer lg:text-sm hover:bg-gray-100 ${
-          alreadySaved?.length > 0 && "text-red-500"
+          alreadySaved?.length > 0 && !unsaving && "text-red-500"
         }`}
-        onClick={() => {
-          saveOrUnsavePost(postId);
-          refreshData();
-        }}
+        onClick={() => saveOrUnsavePost(postId)}
       >
         <AiOutlineSave fontSize={16} />
         <p>

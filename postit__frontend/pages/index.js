@@ -1,16 +1,23 @@
 import React from "react";
-
+import { dehydrate, QueryClient } from "react-query";
+import { useData } from "../hooks/useData";
 import { Layout, Posts } from "../components";
 import { client } from "../client/client";
+import { getSession } from "next-auth/react";
+import { fetchAllPosts } from "../utils/fetchers";
 import { postsQuery } from "../utils/data";
 
-import { getSession } from "next-auth/react";
+const Home = () => {
+  const {
+    data: posts,
+    isFetching,
+    refetch,
+  } = useData("feedPosts", fetchAllPosts);
 
-const Home = ({ posts }) => {
   return (
     <Layout>
       <section className="w-full px-4 py-4 md:px-8 lg:px-10">
-        <Posts posts={posts} />
+        <Posts posts={posts} refresh={refetch} isFetching={isFetching} />
       </section>
     </Layout>
   );
@@ -18,6 +25,8 @@ const Home = ({ posts }) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
+  const queryClient = new QueryClient();
+  const query = postsQuery();
 
   if (!session) {
     return {
@@ -37,12 +46,14 @@ export async function getServerSideProps(context) {
   };
 
   await client.createIfNotExists(doc);
-  const query = postsQuery();
-  const posts = await client.fetch(query);
+
+  await queryClient.prefetchQuery("feedPosts", () =>
+    client.fetch(query).then((data) => data)
+  );
 
   return {
     props: {
-      posts,
+      dehydratedState: dehydrate(queryClient),
     },
   };
 }

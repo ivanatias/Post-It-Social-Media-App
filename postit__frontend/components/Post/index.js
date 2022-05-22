@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import ConfirmModal from "./ConfirmModal";
 import Dropdown from "./Dropdown";
+
 import axios from "axios";
 import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Post = ({ post, refreshData }) => {
+const Post = ({ post, refresh }) => {
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -18,10 +18,9 @@ const Post = ({ post, refreshData }) => {
   const [unsaving, setUnsaving] = useState(false);
   const router = useRouter();
 
-  let alreadySaved = post?.saved?.filter(
-    (item) => item.postedBy?._id === session?.user?.uid
+  const alreadySaved = post?.saved?.filter(
+    (item) => item.postedBy._id === session?.user?.uid
   );
-  alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
 
   const deletePost = (postId) => {
     if (!postId) return;
@@ -31,6 +30,7 @@ const Post = ({ post, refreshData }) => {
       })
       .then(() => {
         toast.success("Post deleted!");
+        refresh();
       })
       .catch((error) => {
         toast.error(`Couldn't delete the post due to an error: ${error}`);
@@ -48,6 +48,7 @@ const Post = ({ post, refreshData }) => {
           setSaving(false);
           setDropdownOpen(false);
           toast.success("Post saved!");
+          refresh();
         })
         .catch((error) => {
           setSaving(false);
@@ -66,6 +67,7 @@ const Post = ({ post, refreshData }) => {
           setUnsaving(false);
           setDropdownOpen(false);
           toast.success("Post Unsaved!");
+          refresh();
         })
         .catch((error) => {
           setUnsaving(false);
@@ -115,7 +117,6 @@ const Post = ({ post, refreshData }) => {
             unsaving={unsaving}
             saveOrUnsavePost={saveOrUnsavePost}
             alreadySaved={alreadySaved}
-            refreshData={refreshData}
           />
         )}
         <div className="relative post__image-container">
@@ -135,7 +136,6 @@ const Post = ({ post, refreshData }) => {
           setOpenModal={setOpenModal}
           deletePost={deletePost}
           postId={post?._id}
-          refreshData={refreshData}
         />
       )}
     </>

@@ -14,7 +14,7 @@ const NavLink = ({ href, children, closeSidebar }) => {
     <Link href={href} passHref>
       <a
         className={`transition-all duration-100 ease-in-out hover:text-red-500 last:mt-2 ${
-          router.pathname === href && activeLink
+          router.asPath === href && activeLink
         }`}
         onClick={closeSidebar}
       >
@@ -32,7 +32,7 @@ const Sidebar = ({ closeSidebar }) => {
       <div className="flex items-center justify-center w-20 h-20 rounded-full">
         {session?.user?.image && (
           <NavLink
-            href={`/user-profile/${session?.user?.uid}`}
+            href={`/user/${session?.user?.uid}`}
             closeSidebar={closeSidebar}
           >
             <Image
@@ -51,7 +51,7 @@ const Sidebar = ({ closeSidebar }) => {
       </h1>
       <div className="mt-3 text-sm font-semibold text-gray-200">
         <NavLink
-          href={`/user-profile/${session?.user?.uid}`}
+          href={`/user/${session?.user?.uid}`}
           closeSidebar={closeSidebar}
         >
           Profile
