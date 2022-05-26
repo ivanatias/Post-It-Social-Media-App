@@ -14,10 +14,9 @@ export default {
       type: "string",
     },
     {
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "string" }],
+      name: "category",
+      title: "Category",
+      type: "string",
     },
 
     {
