@@ -19,7 +19,7 @@ const Posts = ({ posts, refresh, isFetching }) => {
       breakpointCols={breakpointColumnsObj}
     >
       {posts?.map((post) => (
-        <Post key={post?._id} post={post} refresh={refresh} />
+        <Post key={post._id} post={post} refresh={refresh} />
       ))}
       {isFetching && <Loading />}
     </Masonry>
