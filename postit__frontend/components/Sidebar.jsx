@@ -37,7 +37,7 @@ const Sidebar = ({ closeSidebar }) => {
           >
             <Image
               alt="User Avatar Image"
-              src={session?.user.image}
+              src={session?.user?.image}
               width={80}
               height={80}
               objectFit="cover"

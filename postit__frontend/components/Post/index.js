@@ -8,7 +8,6 @@ import Dropdown from "./Dropdown";
 import axios from "axios";
 import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const Post = ({ post, refresh }) => {
   const { data: session } = useSession();
@@ -42,13 +41,13 @@ const Post = ({ post, refresh }) => {
       setSaving(true);
       axios
         .post(
-          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session.user.uid}&action=save`
+          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=save`
         )
         .then(() => {
           setSaving(false);
           setDropdownOpen(false);
-          toast.success("Post saved!");
           refresh();
+          toast.success("Post saved!");
         })
         .catch((error) => {
           setSaving(false);
@@ -61,13 +60,13 @@ const Post = ({ post, refresh }) => {
       setUnsaving(true);
       axios
         .post(
-          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session.user.uid}&action=unsave`
+          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=unsave`
         )
         .then(() => {
           setUnsaving(false);
           setDropdownOpen(false);
-          toast.success("Post Unsaved!");
           refresh();
+          toast.success("Post Unsaved!");
         })
         .catch((error) => {
           setUnsaving(false);
@@ -80,11 +79,11 @@ const Post = ({ post, refresh }) => {
 
   return (
     <>
-      <div className="relative p-3 transition duration-300 ease-in-out hover:shadow-md hover:shadow-gray-600">
+      <article className="relative p-3 transition duration-300 ease-in-out hover:shadow-md hover:shadow-gray-600">
         <div className="flex items-center justify-between w-full mb-3">
           <div
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => router.push(`/user-profile/${post.postedBy._id}`)}
+            onClick={() => router.push(`/user/${post?.postedBy?._id}`)}
           >
             <img
               src={post?.postedBy?.image}
@@ -123,14 +122,14 @@ const Post = ({ post, refresh }) => {
           <Image
             src={post?.image?.asset?.url}
             placeholder="blur"
-            blurDataURL={post.image?.asset?.url}
+            blurDataURL={post?.image?.asset?.url}
             layout="fill"
             className="rounded-lg post__image"
             alt="post"
           />
         </div>
-        <p className="mt-3 text-sm text-white 2xl:text-base">{post.title}</p>
-      </div>
+        <p className="mt-3 text-sm text-white 2xl:text-base">{post?.title}</p>
+      </article>
       {openModal && (
         <ConfirmModal
           setOpenModal={setOpenModal}

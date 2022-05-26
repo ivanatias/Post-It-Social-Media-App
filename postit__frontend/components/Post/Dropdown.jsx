@@ -32,7 +32,7 @@ const Dropdown = ({
         onClick={() => setDropdownOpen(false)}
       >
         <AiOutlineDownload fontSize={16} />
-        <p>Download</p>
+        Download
       </a>
       <button
         className={`flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out border-none rounded-md shadow-md outline-none cursor-pointer lg:text-sm hover:bg-gray-100 ${
@@ -41,15 +41,14 @@ const Dropdown = ({
         onClick={() => saveOrUnsavePost(postId)}
       >
         <AiOutlineSave fontSize={16} />
-        <p>
-          {saving
-            ? "Saving..."
-            : unsaving
-            ? "Unsaving"
-            : alreadySaved?.length > 0
-            ? "Saved"
-            : "Save"}
-        </p>
+
+        {saving
+          ? "Saving..."
+          : unsaving
+          ? "Unsaving"
+          : alreadySaved?.length > 0
+          ? "Saved"
+          : "Save"}
       </button>
       <button
         className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out border-none rounded-md shadow-md outline-none cursor-pointer lg:text-sm hover:bg-gray-100"
@@ -59,7 +58,7 @@ const Dropdown = ({
         }}
       >
         <AiOutlineEye fontSize={16} />
-        <p>Post Details</p>
+        Post Details
       </button>
       {session?.user?.uid === postedBy?._id && (
         <button
@@ -70,7 +69,7 @@ const Dropdown = ({
           }}
         >
           <AiOutlineDelete fontSize={16} />
-          <p>Delete</p>
+          Delete
         </button>
       )}
     </div>
