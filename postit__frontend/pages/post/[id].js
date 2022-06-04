@@ -74,7 +74,7 @@ const PostDetails = () => {
       ogType="article"
       ogImage={postDetails?.image?.asset?.url}
     >
-      <section className="flex flex-col w-full gap-5 px-4 py-4 md:py-8 mx-auto max-w-7xl md:px-8 lg:px-10">
+      <section className="flex flex-col w-full gap-5 px-4 pt-4 pb-8 md:pt-12 md:pb-12 mx-auto max-w-7xl md:px-8 lg:px-10">
         {!editingPostMode ? (
           <>
             <div className="flex items-center justify-center gap-5">
