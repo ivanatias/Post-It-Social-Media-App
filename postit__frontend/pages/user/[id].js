@@ -1,11 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { dehydrate, QueryClient } from "react-query";
-import { Layout, Loading, Posts } from "../../components";
+import { Layout, Posts } from "../../components";
 import {
   postsByUserQuery,
   userQuery,
-  usersQuery,
   postsSavedByUserQuery,
 } from "../../utils/data";
 import {
@@ -37,9 +36,6 @@ const UserProfile = () => {
     refetch: refetchPostsSavedByUser,
   } = useData(["postsSavedByUser", id], fetchPostsSavedByUser, id);
 
-  if (!session && typeof window !== "undefined") {
-    router.push("/login");
-  }
   return (
     <Layout
       title={`PostIt | ${user?.userName} Profile`}
