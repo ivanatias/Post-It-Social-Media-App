@@ -63,15 +63,17 @@ const UserProfile = () => {
             {user?.userName}
           </h1>
           <div className="ring-2 ring-gray-100 p-1 flex items-center justify-center rounded-full w-60 h-60 2xl:w-80 2xl:h-80">
-            <div className="relative w-full h-full">
-              <Image
-                src={user?.image}
-                layout="fill"
-                className="rounded-full"
-                alt="User Avatar"
-                objectFit="cover"
-              />
-            </div>
+            {user?.image && (
+              <div className="relative w-full h-full">
+                <Image
+                  src={user?.image}
+                  layout="fill"
+                  className="rounded-full"
+                  alt="User Avatar"
+                  objectFit="cover"
+                />
+              </div>
+            )}
           </div>
           {user?._id === session?.user?.uid && (
             <div className="w-full flex items-center justify-center">
@@ -130,9 +132,7 @@ export async function getServerSideProps(context) {
   const session = await getSession(context);
   const queryClient = new QueryClient();
   const user = userQuery(context.params.id);
-  const postsByUser = postsByUserQuery(context.params.id);
-  const postsSavedByUser = postsSavedByUserQuery(context.params.id);
-  let foundUser;
+  let foundData;
 
   if (!session) {
     return {
@@ -145,21 +145,23 @@ export async function getServerSideProps(context) {
 
   await queryClient.prefetchQuery(["userInfo", context.params.id], () =>
     client.fetch(user).then((data) => {
-      foundUser = data;
+      foundData = data;
       return data[0];
     })
   );
 
-  if (!foundUser) {
+  if (foundData.length === 0) {
     return {
       notFound: true,
     };
   }
 
+  const postsByUser = postsByUserQuery(context.params.id);
   await queryClient.prefetchQuery(["postsByUser", context.params.id], () =>
     client.fetch(postsByUser).then((data) => data)
   );
 
+  const postsSavedByUser = postsSavedByUserQuery(context.params.id);
   await queryClient.prefetchQuery(["postsSavedByUser", context.params.id], () =>
     client.fetch(postsSavedByUser).then((data) => data)
   );
