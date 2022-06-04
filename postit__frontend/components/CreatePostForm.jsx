@@ -47,6 +47,7 @@ const CreatePostForm = ({
       selectedFile.type === "image/png" ||
       selectedFile.type === "image/svg" ||
       selectedFile.type === "image/gif" ||
+      selectedFile.type === "image/jpg" ||
       selectedFile.type === "image/tiff"
     ) {
       setWrongImageType(false);
@@ -163,7 +164,7 @@ const CreatePostForm = ({
                       You can upload an image with a JPEG, PNG, GIF, SVG, or
                       TIFF format.
                     </p>
-                    <p className="mt-5 text-gray-400 font-bold text-xs 2xl:text-sm">
+                    <p className="mt-5 text-gray-400 font-bold text-xs 2xl:text-sm text-center">
                       High Quality images with less than 20MB are recommended.
                     </p>
                   </>
