@@ -42,6 +42,7 @@ export const postsQuery = () => {
     },
     _id,
     title,
+    category,
     postedBy -> {
       _id,
       userName,
@@ -52,8 +53,6 @@ export const postsQuery = () => {
       _key,
       postedBy -> {
         _id,
-        userName,
-        image
       }
     },
   }`;
@@ -121,11 +120,89 @@ export const postsByCategoryQuery = (category, postId) => {
       _key,
       postedBy -> {
         _id,
-        userName,
-        image
       }
     },
   }`;
 
+  return query;
+};
+
+export const usersQuery = () => {
+  const query = `*[_type == "user"]`;
+  return query;
+};
+
+export const postsByUserQuery = (userId) => {
+  const query = `*[ _type == 'post' && userId == '${userId}'] | order(_createdAt desc){
+    image{
+      asset->{
+        url
+      }
+    },
+    _id,
+    category,
+    postedBy->{
+      _id,
+      userName,
+      image,
+      userTag,
+    },
+    saved[]{
+      postedBy->{
+        _id,
+      },
+    },
+  }`;
+  return query;
+};
+
+export const postsSavedByUserQuery = (userId) => {
+  const query = `*[ _type == 'post' && '${userId}' in saved[].userId ] | order(_createdAt desc){
+    image{
+      asset->{
+        url
+      }
+    },
+    _id,
+    postedBy->{
+      _id,
+      userName,
+      image,
+      userTag,
+    },
+    saved[]{
+      postedBy->{
+        _id,
+      },
+    },
+  }`;
+
+  return query;
+};
+
+export const searchPostQuery = (searchTerm) => {
+  if (!searchTerm) return;
+  const query = `*[_type == "post" && title match '${searchTerm}' || description match '${searchTerm}']{
+    image {
+      asset -> {
+        url
+      }
+    },
+    _id,
+    title,
+    category,
+    postedBy -> {
+      _id,
+      userName,
+      image,
+      userTag,
+    },
+    saved[] {
+      _key,
+      postedBy -> {
+        _id,
+      }
+    },
+  }`;
   return query;
 };

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useModal } from "../../hooks/useModal";
 import ConfirmModal from "./ConfirmModal";
 import Dropdown from "./Dropdown";
 
@@ -12,9 +13,10 @@ import { toast } from "react-toastify";
 const Post = ({ post, refresh }) => {
   const { data: session } = useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [saving, setSaving] = useState(false);
   const [unsaving, setUnsaving] = useState(false);
+
+  const { openModal, toggleModal } = useModal();
   const router = useRouter();
 
   const alreadySaved = post?.saved?.filter(
@@ -32,7 +34,9 @@ const Post = ({ post, refresh }) => {
         refresh();
       })
       .catch((error) => {
-        toast.error(`Couldn't delete the post due to an error: ${error}`);
+        toast.error(
+          `Couldn't delete the post due to an error: ${error.message}`
+        );
       });
   };
 
@@ -84,6 +88,7 @@ const Post = ({ post, refresh }) => {
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => router.push(`/user/${post?.postedBy?._id}`)}
+            aria-label="Visit user profile"
           >
             <img
               src={post?.postedBy?.image}
@@ -94,9 +99,11 @@ const Post = ({ post, refresh }) => {
               {post?.postedBy?.userTag}
             </div>
           </div>
+
           <div
             className="flex items-center justify-center w-5 h-5 transition duration-150 ease-in-out bg-white rounded-sm cursor-pointer hover:bg-gray-200"
             onClick={() => setDropdownOpen(!dropdownOpen)}
+            aria-label="Open dropdown"
           >
             {dropdownOpen ? (
               <HiOutlineChevronUp fontSize={16} />
@@ -108,7 +115,7 @@ const Post = ({ post, refresh }) => {
         {dropdownOpen && (
           <Dropdown
             setDropdownOpen={setDropdownOpen}
-            setOpenModal={setOpenModal}
+            toggleModal={toggleModal}
             postedBy={post?.postedBy}
             postImage={post?.image}
             postId={post?._id}
@@ -119,20 +126,22 @@ const Post = ({ post, refresh }) => {
           />
         )}
         <div className="relative post__image-container">
-          <Image
-            src={post?.image?.asset?.url}
-            placeholder="blur"
-            blurDataURL={post?.image?.asset?.url}
-            layout="fill"
-            className="rounded-lg post__image"
-            alt="post"
-          />
+          {post?.image && (
+            <Image
+              src={post?.image?.asset?.url}
+              placeholder="blur"
+              blurDataURL={post?.image?.asset?.url}
+              layout="fill"
+              className="rounded-lg post__image"
+              alt="post"
+            />
+          )}
         </div>
         <p className="mt-3 text-sm text-white 2xl:text-base">{post?.title}</p>
       </article>
       {openModal && (
         <ConfirmModal
-          setOpenModal={setOpenModal}
+          toggleModal={toggleModal}
           deletePost={deletePost}
           postId={post?._id}
         />

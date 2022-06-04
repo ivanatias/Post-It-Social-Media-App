@@ -39,7 +39,6 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
   const removeComment = (e, comment) => {
     e.stopPropagation();
     if (!comment) return;
-
     axios
       .post("/api/comments/removeComment", {
         postId: id,
@@ -72,6 +71,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
               <div
                 className="flex items-center gap-2 cursor-pointer w-fit"
                 onClick={() => router.push(`/user/${comment.postedBy._id}`)}
+                aria-label="Visit user profile"
               >
                 <img
                   src={comment.postedBy.image}

@@ -11,7 +11,7 @@ import {
 
 const Dropdown = ({
   setDropdownOpen,
-  setOpenModal,
+  toggleModal,
   postedBy,
   postImage,
   postId,
@@ -65,7 +65,7 @@ const Dropdown = ({
           className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out border-none rounded-md shadow-md outline-none cursor-pointer lg:text-sm hover:bg-gray-100"
           onClick={() => {
             setDropdownOpen(false);
-            setOpenModal(true);
+            toggleModal();
           }}
         >
           <AiOutlineDelete fontSize={16} />

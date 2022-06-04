@@ -6,3 +6,7 @@ export { default as Post } from "./Post";
 export { default as Posts } from "./Posts";
 export { default as CommentsBox } from "./CommentsBox";
 export { default as SavedByBox } from "./SavedByBox";
+export { default as CreatePostForm } from "./CreatePostForm";
+export { default as NotSignedIn } from "./NotSignedIn";
+export { default as ErrorBoundary } from "./ErrorBoundary";
+export { default as ErrorFallback } from "./ErrorFallback";

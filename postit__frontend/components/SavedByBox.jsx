@@ -24,7 +24,7 @@ const SavedByBox = ({ saved, setOpenSavedByBox }) => {
               key={item._key}
               className="flex items-center gap-3 cursor-pointer"
               onClick={() => router.push(`/user/${item.postedBy._id}`)}
-              aria-description="Go to user profile page"
+              aria-label="Visit user profile"
             >
               <img
                 src={item.postedBy.image}

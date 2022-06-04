@@ -1,32 +1,39 @@
 import React from "react";
+import SearchContext from "../searchContext";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "next-auth/react";
+import { ErrorBoundary, ErrorFallback } from "../components";
 
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   const [queryClient] = React.useState(() => new QueryClient());
+
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
+        <SearchContext>
+          <SessionProvider session={session}>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          </SessionProvider>
           <ToastContainer
             position="bottom-right"
             autoClose={3500}
             hideProgressBar
-            newestOnTop={false}
+            newestOnTop={true}
             closeOnClick
             rtl={false}
             pauseOnFocusLoss
             draggable
             pauseOnHover
           />
-          <ReactQueryDevtools />
-        </SessionProvider>
+        </SearchContext>
+        <ReactQueryDevtools />
       </Hydrate>
     </QueryClientProvider>
   );
