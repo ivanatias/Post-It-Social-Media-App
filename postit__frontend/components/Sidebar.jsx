@@ -28,7 +28,7 @@ const Sidebar = ({ closeSidebar }) => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-5 overflow-y-scroll shadow-md hide-scrollbar bg-neutral-900 md:h-screen shadow-gray-100 md:shadow-none md:w-56 md:justify-start ">
+    <div className="flex flex-col items-center w-full h-full p-5 overflow-y-auto shadow-md hide-scrollbar bg-neutral-900 md:h-screen shadow-gray-100 md:shadow-none md:w-56 md:justify-start ">
       <div className="flex items-center justify-center w-20 h-20 rounded-full">
         {session?.user?.image && (
           <NavLink
