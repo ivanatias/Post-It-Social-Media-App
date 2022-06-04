@@ -140,7 +140,7 @@ export const postsByUserQuery = (userId) => {
       }
     },
     _id,
-    category,
+    title
     postedBy->{
       _id,
       userName,
@@ -164,6 +164,7 @@ export const postsSavedByUserQuery = (userId) => {
       }
     },
     _id,
+    title
     postedBy->{
       _id,
       userName,
