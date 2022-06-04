@@ -46,92 +46,86 @@ const UserProfile = () => {
       ogUrl={process.env.NEXT_PUBLIC_BASEURL + router.asPath}
       ogType="article"
     >
-      {router.isFallback ? (
-        <Loading />
-      ) : (
-        <>
-          <div className="relative w-full h-[250px] 2xl:h-[350px]">
-            <Image
-              layout="fill"
-              placeholder="blur"
-              blurDataURL={`https://source.unsplash.com/1600x900/?${
-                postsByUser[0]?.category || "nature"
-              }`}
-              src={`https://source.unsplash.com/1600x900/?${
-                postsByUser[0]?.category || "nature"
-              }`}
-              alt="user-Cover-Pic"
-              objectFit="cover"
-              priority
-            />
-          </div>
-          <section className="flex flex-col w-full gap-5 px-4 py-12 mx-auto max-w-7xl md:px-8 lg:px-10">
-            <div className="flex flex-col justify-center items-center gap-8">
-              <h1 className="text-center text-2xl 2xl:text-4xl text-white font-bold">
-                {user?.userName}
-              </h1>
-              <div className="ring-2 ring-gray-100 p-1 flex items-center justify-center rounded-full w-60 h-60 2xl:w-80 2xl:h-80">
-                <div className="relative w-full h-full">
-                  <Image
-                    src={user?.image}
-                    layout="fill"
-                    className="rounded-full"
-                    alt="User Avatar"
-                    objectFit="cover"
-                  />
-                </div>
-              </div>
-              {user?._id === session?.user?.uid && (
-                <div className="w-full flex items-center justify-center">
-                  <button
-                    type="button"
-                    className="mt-2 w-full max-w-[120px] rounded-lg text-base 2xl:text-lg text-white font-bold border-none outline-none bg-red-500 p-2 flex items-center justify-center transition duration-150 hover:bg-red-700"
-                    onClick={() => signOut({ callbackUrl: "/login" })}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
-              <div className="flex flex-col gap-2 mt-5 w-full">
-                <span className="text-white text-base 2xl:text-xl font-bold">
-                  Posts by {user?.userName}{" "}
-                  {postsByUser?.length > 0 ? `(${postsByUser.length})` : `(0)`}
-                </span>
-                {postsByUser?.length > 0 ? (
-                  <Posts
-                    posts={postsByUser}
-                    refresh={refetchPostsByUser}
-                    isFetching={isFetchingPostsByUser}
-                  />
-                ) : (
-                  <p className="text-sm 2xl:text-lg text-gray-400 w-full">
-                    This user has not posted anything yet.
-                  </p>
-                )}
-              </div>
-              <div className="flex flex-col gap-2 mt-5 w-full">
-                <span className="text-white text-base 2xl:text-xl font-bold">
-                  Saved by {user?.userName}{" "}
-                  {postsSavedByUser?.length > 0
-                    ? `(${postsSavedByUser.length})`
-                    : `(0)`}
-                </span>
-                {postsSavedByUser?.length > 0 ? (
-                  <Posts
-                    posts={postsSavedByUser}
-                    refresh={refetchPostsSavedByUser}
-                    isFetching={isFetchingPostsSavedByUser}
-                  />
-                ) : (
-                  <p className="text-sm 2xl:text-lg text-gray-400 w-full">
-                    This user has not saved any post yet.
-                  </p>
-                )}
-              </div>
+      <div className="relative w-full h-[250px] 2xl:h-[350px]">
+        <Image
+          layout="fill"
+          placeholder="blur"
+          blurDataURL={`https://source.unsplash.com/1600x900/?${
+            postsByUser[0]?.category || "nature"
+          }`}
+          src={`https://source.unsplash.com/1600x900/?${
+            postsByUser[0]?.category || "nature"
+          }`}
+          alt="user-Cover-Pic"
+          objectFit="cover"
+          priority
+        />
+      </div>
+      <section className="flex flex-col w-full gap-5 px-4 py-12 mx-auto max-w-7xl md:px-8 lg:px-10">
+        <div className="flex flex-col justify-center items-center gap-8">
+          <h1 className="text-center text-2xl 2xl:text-4xl text-white font-bold">
+            {user?.userName}
+          </h1>
+          <div className="ring-2 ring-gray-100 p-1 flex items-center justify-center rounded-full w-60 h-60 2xl:w-80 2xl:h-80">
+            <div className="relative w-full h-full">
+              <Image
+                src={user?.image}
+                layout="fill"
+                className="rounded-full"
+                alt="User Avatar"
+                objectFit="cover"
+              />
             </div>
-          </section>
-        </>
-      )}
+          </div>
+          {user?._id === session?.user?.uid && (
+            <div className="w-full flex items-center justify-center">
+              <button
+                type="button"
+                className="mt-2 w-full max-w-[120px] rounded-lg text-base 2xl:text-lg text-white font-bold border-none outline-none bg-red-500 p-2 flex items-center justify-center transition duration-150 hover:bg-red-700"
+                onClick={() => signOut({ callbackUrl: "/login" })}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+          <div className="flex flex-col gap-2 mt-5 w-full">
+            <span className="text-white text-base 2xl:text-xl font-bold">
+              Posts by {user?.userName}{" "}
+              {postsByUser?.length > 0 ? `(${postsByUser.length})` : `(0)`}
+            </span>
+            {postsByUser?.length > 0 ? (
+              <Posts
+                posts={postsByUser}
+                refresh={refetchPostsByUser}
+                isFetching={isFetchingPostsByUser}
+              />
+            ) : (
+              <p className="text-sm 2xl:text-lg text-gray-400 w-full">
+                This user has not posted anything yet.
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-2 mt-5 w-full">
+            <span className="text-white text-base 2xl:text-xl font-bold">
+              Saved by {user?.userName}{" "}
+              {postsSavedByUser?.length > 0
+                ? `(${postsSavedByUser.length})`
+                : `(0)`}
+            </span>
+            {postsSavedByUser?.length > 0 ? (
+              <Posts
+                posts={postsSavedByUser}
+                refresh={refetchPostsSavedByUser}
+                isFetching={isFetchingPostsSavedByUser}
+              />
+            ) : (
+              <p className="text-sm 2xl:text-lg text-gray-400 w-full">
+                This user has not saved any post yet.
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 };
