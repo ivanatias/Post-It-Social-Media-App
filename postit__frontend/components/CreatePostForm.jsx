@@ -61,16 +61,14 @@ const CreatePostForm = ({
           },
         })
         .then((data) => {
-          if (data.statusText === "OK") {
+          if (data.status === 200) {
             const results = data.data;
             setPostImage(results);
             setUploadingImage(false);
             toast.success("Image uploaded!");
           } else {
             setUploadingImage(false);
-            toast.error(
-              `Error uploading image, try again. ${data.statusText} ${data.status}`
-            );
+            toast.error("Error uploading image, try again.");
           }
         })
         .catch((error) => {
