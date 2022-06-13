@@ -55,7 +55,11 @@ const CreatePostForm = ({
       const form = new FormData();
       form.append("uploadedFile", selectedFile);
       axios
-        .post("/api/posts/uploadImage", form)
+        .post("/api/posts/uploadImage", form, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then((data) => {
           if (data.statusText === "OK") {
             const results = data.data;
@@ -64,7 +68,9 @@ const CreatePostForm = ({
             toast.success("Image uploaded!");
           } else {
             setUploadingImage(false);
-            toast.error("Error uploading image, try again.");
+            toast.error(
+              `Error uploading image, try again. ${data.statusText} ${data.status}`
+            );
           }
         })
         .catch((error) => {
@@ -127,16 +133,16 @@ const CreatePostForm = ({
 
   return (
     <>
-      <div className="w-full flex flex-col items-center justify-center gap-5">
+      <div className="flex flex-col items-center justify-center w-full gap-5">
         <div
           className={`relative w-full mt-5 h-[450px] max-w-2xl rounded-2xl border-2 border-gray-300 flex flex-col items-center justify-center bg-transparent`}
         >
           {uploadingImage ? (
             <div className="flex flex-col items-center">
-              <p className="text-gray-400 text-sm 2xl:text-base font-bold">
+              <p className="text-sm font-bold text-gray-400 2xl:text-base">
                 Uploading...
               </p>
-              <p className="text-gray-400 text-xs 2xl:text-sm mt-2">
+              <p className="mt-2 text-xs text-gray-400 2xl:text-sm">
                 Please wait for a few seconds
               </p>
             </div>
@@ -154,17 +160,17 @@ const CreatePostForm = ({
             <>
               <div className="flex flex-col items-center">
                 {wrongImageType ? (
-                  <p className="text-red-500 text-sm 2xl:text-base text-center">
+                  <p className="text-sm text-center text-red-500 2xl:text-base">
                     Please select an image with the correct format.
                   </p>
                 ) : (
                   <>
                     <AiOutlineUpload fontSize={150} className="text-gray-100" />
-                    <p className="text-gray-400 text-sm 2xl:text-base text-center">
+                    <p className="text-sm text-center text-gray-400 2xl:text-base">
                       You can upload an image with a JPEG, PNG, GIF, SVG, or
                       TIFF format.
                     </p>
-                    <p className="mt-5 text-gray-400 font-bold text-xs 2xl:text-sm text-center">
+                    <p className="mt-5 text-xs font-bold text-center text-gray-400 2xl:text-sm">
                       High Quality images with less than 20MB are recommended.
                     </p>
                   </>
@@ -176,7 +182,7 @@ const CreatePostForm = ({
       </div>
       <form
         onSubmit={editingPostMode ? editPost : addPost}
-        className="w-full flex flex-col gap-8 items-center"
+        className="flex flex-col items-center w-full gap-8"
       >
         {!editingPostMode && (
           <div className="flex flex-col items-center">
@@ -196,11 +202,11 @@ const CreatePostForm = ({
           </div>
         )}
         {allFields && (
-          <p className="text-center text-red-500 text-sm 2xl:text-base">
+          <p className="text-sm text-center text-red-500 2xl:text-base">
             Please fill all required fields.
           </p>
         )}
-        <div className="w-full flex flex-col max-w-2xl gap-8">
+        <div className="flex flex-col w-full max-w-2xl gap-8">
           <input
             type="text"
             className="border-[1px] border-gray-100 outline-none p-4 text-white placeholder:text-gray-400 bg-transparent rounded-lg"
@@ -243,7 +249,7 @@ const CreatePostForm = ({
               uploadingImage || creatingPost || wrongImageType || isEditingPost
             }
             type="submit"
-            className="w-full rounded-sm text-base 2xl:text-lg text-white font-bold border-none outline-none bg-red-500 px-2 py-4 flex items-center justify-center transition duration-150 hover:bg-red-700 disabled:opacity-40"
+            className="flex items-center justify-center w-full px-2 py-4 text-base font-bold text-white transition duration-150 bg-red-500 border-none rounded-sm outline-none 2xl:text-lg hover:bg-red-700 disabled:opacity-40"
           >
             {isEditingPost
               ? "Editing post..."
@@ -256,7 +262,7 @@ const CreatePostForm = ({
           {editingPostMode && (
             <button
               type="button"
-              className="w-full text-base 2xl:text-lg text-gray-300 hover:text-white transition duration-150 flex items-center justify-center"
+              className="flex items-center justify-center w-full text-base text-gray-300 transition duration-150 2xl:text-lg hover:text-white"
               onClick={() => setEditingPostMode(false)}
             >
               Cancel
