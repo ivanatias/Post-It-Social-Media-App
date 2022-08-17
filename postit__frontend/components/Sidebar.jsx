@@ -63,7 +63,7 @@ const Sidebar = ({ closeSidebar }) => {
         </NavLink>
       </div>
       <div className="flex flex-col items-center justify-center w-full">
-        <h2 className="mb-3 text-xl font-bold text-white">
+        <h2 className="mb-3 text-lg font-bold text-center text-white">
           Discover categories
         </h2>
         <div className="flex flex-col items-center justify-center w-full gap-2 font-semibold text-gray-200">
