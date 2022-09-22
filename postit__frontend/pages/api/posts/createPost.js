@@ -22,6 +22,8 @@ module.exports = async (req, res) => {
           _ref: userId,
         },
         category: postCategory,
+        saved: [],
+        comments: [],
       };
       await client.create(doc);
       res.status(200).json({ message: "Post succesfully created!" });
