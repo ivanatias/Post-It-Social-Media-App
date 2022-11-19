@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useField } from "../../hooks/useField";
+import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
-import { categories } from "../utils/data";
+import { categories } from "../../utils/data";
 import { AiOutlineUpload } from "react-icons/ai";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -17,25 +19,38 @@ const CreatePostForm = ({
   refresh,
 }) => {
   const { data: session } = useSession();
-  const [postTitle, setPostTitle] = useState(postTitleToEdit || "");
-  const [postDescription, setPostDescription] = useState(
-    postDescriptionToEdit || ""
-  );
-  const [postImage, setPostImage] = useState(postImageToEdit || null);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [postCategory, setPostCategory] = useState(postCategoryToEdit || "");
-  const [wrongImageType, setWrongImageType] = useState(false);
-  const [allFields, setAllFields] = useState(false);
-  const [creatingPost, setCreatingPost] = useState(false);
-  const [isEditingPost, setIsEditingPost] = useState(false);
+
+  const { value: postTitle, handleValueChange: handlePostTitleChange } =
+    useField(postTitleToEdit ?? "");
+
+  const { value: postDescription, handleValueChange: handlePostDescChange } =
+    useField(postDescriptionToEdit ?? "");
+
+  const { value: postCategory, handleValueChange: handlePostCategoryChange } =
+    useField(postCategoryToEdit ?? "");
+
+  const [postImage, setPostImage] = useState(postImageToEdit ?? null);
+
+  const { value: uploadingImage, toggleValue: toggleUploadingImage } =
+    useToggle();
+
+  const { value: wrongImageType, toggleValue: toggleWrongImageType } =
+    useToggle();
+
+  const { value: allFields, toggleValue: toggleAllFields } = useToggle();
+
+  const { value: creatingPost, toggleValue: toggleCreatingPost } = useToggle();
+
+  const { value: isEditingPost, toggleValue: toggleisEditingPost } =
+    useToggle();
 
   const router = useRouter();
   const { id } = router.query;
 
   const showAllFieldsMessage = () => {
-    setAllFields(true);
+    toggleAllFields();
     setTimeout(() => {
-      setAllFields(false);
+      toggleAllFields();
     }, 4000);
   };
 
@@ -50,8 +65,8 @@ const CreatePostForm = ({
       selectedFile.type === "image/jpg" ||
       selectedFile.type === "image/tiff"
     ) {
-      setWrongImageType(false);
-      setUploadingImage(true);
+      toggleWrongImageType(false);
+      toggleUploadingImage();
       const form = new FormData();
       form.append("uploadedFile", selectedFile);
       axios
@@ -64,29 +79,28 @@ const CreatePostForm = ({
           if (data.status === 200) {
             const results = data.data;
             setPostImage(results);
-            setUploadingImage(false);
+            toggleUploadingImage();
             toast.success("Image uploaded!");
           } else {
-            setUploadingImage(false);
+            toggleUploadingImage();
             toast.error("Error uploading image, try again.");
           }
         })
         .catch((error) => {
-          setUploadingImage(false);
+          toggleUploadingImage();
           toast.error(`Error uploading image ${error.message}`);
         });
     } else {
-      setWrongImageType(true);
+      toggleWrongImageType(true);
     }
   };
 
   const addPost = (e) => {
     e.preventDefault();
     if (!postTitle || !postImage || !postCategory) {
-      showAllFieldsMessage();
-      return;
+      return showAllFieldsMessage();
     } else {
-      setCreatingPost(true);
+      toggleCreatingPost();
       axios
         .post("/api/posts/createPost", {
           postImage: postImage,
@@ -97,11 +111,11 @@ const CreatePostForm = ({
         })
         .then(() => {
           toast.success("You created a post!");
-          setCreatingPost(false);
+          toggleCreatingPost();
           router.push("/");
         })
         .catch((error) => {
-          setCreatingPost(false);
+          toggleCreatingPost();
           toast.error(`Error creating post, try again. ${error.message}`);
         });
     }
@@ -109,7 +123,10 @@ const CreatePostForm = ({
 
   const editPost = (e) => {
     e.preventDefault();
-    setIsEditingPost(true);
+    if (!postTitle || !postCategory) {
+      return showAllFieldsMessage();
+    }
+    toggleisEditingPost();
     axios
       .post("/api/posts/editPost", {
         postId: id,
@@ -119,12 +136,12 @@ const CreatePostForm = ({
       })
       .then(() => {
         toast.success("Post edited");
-        setIsEditingPost(false);
+        toggleisEditingPost();
         refresh();
         setEditingPostMode(false);
       })
       .catch((error) => {
-        setIsEditingPost(false);
+        toggleisEditingPost();
         toast.error(`Error editing post: ${error.message}`);
       });
   };
@@ -209,19 +226,19 @@ const CreatePostForm = ({
             type="text"
             className="border-[1px] border-gray-100 outline-none p-4 text-white placeholder:text-gray-400 bg-transparent rounded-lg"
             placeholder="Post title"
-            value={postTitle || ""}
-            onChange={(e) => setPostTitle(e.target.value)}
+            value={postTitle}
+            onChange={handlePostTitleChange}
           />
           <textarea
             className="max-h-[300px] overflow-y-auto min-h-[150px] border-[1px] border-gray-100 outline-none p-4 text-white placeholder:text-gray-400 bg-transparent rounded-lg"
             rows={4}
             placeholder="What's your post about?"
-            value={postDescription || ""}
-            onChange={(e) => setPostDescription(e.target.value)}
+            value={postDescription}
+            onChange={handlePostDescChange}
           />
           <select
             className="p-3 border-[1px] border-gray-100 rounded-lg bg-transparent text-gray-400"
-            onChange={(e) => setPostCategory(e.target.value)}
+            onChange={handlePostCategoryChange}
           >
             <option
               value=""
@@ -236,7 +253,7 @@ const CreatePostForm = ({
                 key={category.name + index}
                 value={category.name}
                 className="text-black"
-                selected={postCategoryToEdit === category.name ? true : false}
+                selected={postCategoryToEdit === category.name}
               >
                 {category.name}
               </option>

@@ -7,7 +7,7 @@ import {
   CommentsBox,
   SavedByBox,
   Loading,
-  CreatePostForm,
+  PostForm,
   UserHeader,
   ConfirmModal,
 } from "../../components";
@@ -206,7 +206,7 @@ const PostDetails = () => {
             {deletingPost && <Loading />}
           </>
         ) : (
-          <CreatePostForm
+          <PostForm
             editingPostMode={editingPostMode}
             setEditingPostMode={setEditingPostMode}
             postTitleToEdit={postDetails?.title}
