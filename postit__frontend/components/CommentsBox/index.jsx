@@ -5,8 +5,8 @@ import Comment from "./Comment";
 import CommentsForm from "./CommentsForm";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { addComment, removeComment } from "../../services/comments";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 const CommentsBox = ({ comments, refresh, isFetching }) => {
   const [commentInput, setCommentInput] = useState("");
@@ -19,46 +19,40 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
     setCommentInput(e.target.value);
   };
 
-  const addComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
-
-    if (commentInput) {
-      setAddingComment(true);
-      axios
-        .post("/api/comments/addComment", {
-          postId: id,
-          userId: session?.user?.uid,
-          comment: commentInput,
-        })
-        .then(() => {
-          setAddingComment(false);
-          setCommentInput("");
-          refresh();
-          toast.success("You added a comment!");
-        })
-        .catch((error) => {
-          setAddingComment(false);
-          toast.error(`Couldn't add comment due to an error: ${error.message}`);
-        });
+    if (!commentInput) return;
+    setAddingComment(true);
+    try {
+      await addComment({
+        postId: id,
+        userId: session?.user?.uid,
+        comment: commentInput,
+      });
+      refresh();
+      toast.success("You added a comment!");
+    } catch (err) {
+      toast.error(`Couldn't add comment due to an error: ${err.message}`);
+    } finally {
+      setAddingComment(false);
+      setCommentInput("");
     }
   };
 
-  const removeComment = (commentKey) => {
-    axios
-      .post("/api/comments/removeComment", {
+  const handleRemoveComment = async (commentKey) => {
+    try {
+      await removeComment({
         postId: id,
         userId: session?.user?.uid,
         commentKey,
-      })
-      .then(() => {
-        refresh();
-        toast.success("Comment removed");
-      })
-      .catch((error) => {
-        toast.error(
-          `Couldn't remove the comment due to an error: ${error.message}`
-        );
       });
+      refresh();
+      toast.success("Comment removed");
+    } catch (err) {
+      toast.error(
+        `Couldn't remove the comment due to an error: ${err.message}`
+      );
+    }
   };
 
   return (
@@ -69,7 +63,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
             <Comment
               key={comment._key}
               comment={comment}
-              removeComment={removeComment}
+              removeComment={handleRemoveComment}
             />
           ))
         ) : (
@@ -79,7 +73,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
         )}
       </CommentsContainer>
       <CommentsForm
-        onSubmit={addComment}
+        onSubmit={handleAddComment}
         onChange={handleCommentChange}
         commentInput={commentInput}
         addingComment={addingComment}
