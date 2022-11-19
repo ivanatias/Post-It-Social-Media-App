@@ -3,21 +3,22 @@ import { Loading } from "../../components";
 import CommentsContainer from "./CommentsContainer";
 import Comment from "./Comment";
 import CommentsForm from "./CommentsForm";
+import { useField } from "../../hooks/useField.js";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { addComment, removeComment } from "../../services/comments";
 import { toast } from "react-toastify";
 
 const CommentsBox = ({ comments, refresh, isFetching }) => {
-  const [commentInput, setCommentInput] = useState("");
+  const {
+    value: commentInput,
+    handleValueChange: handleCommentChange,
+    resetField: resetComment,
+  } = useField();
   const [addingComment, setAddingComment] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
-
-  const handleCommentChange = (e) => {
-    setCommentInput(e.target.value);
-  };
 
   const handleAddComment = async (e) => {
     e.preventDefault();
@@ -35,7 +36,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
       toast.error(`Couldn't add comment due to an error: ${err.message}`);
     } finally {
       setAddingComment(false);
-      setCommentInput("");
+      resetComment();
     }
   };
 

@@ -16,7 +16,7 @@ const CommentsForm = ({
       {avatarUrl && <UserAvatar avatarUrl={avatarUrl} />}
       <textarea
         placeholder="Add a comment"
-        value={commentInput || ""}
+        value={commentInput}
         onChange={onChange}
         rows={2}
         className="text-white border-2 min-h-[60px] max-h-[100px] flex items-center w-full px-4 py-3 text-xs bg-transparent border-gray-600 rounded-lg outline-none 2xl:text-base"
