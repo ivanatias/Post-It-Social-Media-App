@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import ConfirmModal from "./ConfirmModal";
+import React from "react";
+import ConfirmModal from "../ConfirmModal";
 import Dropdown from "./Dropdown";
 import UserHeader from "../UserHeader";
 import Image from "next/image";
+import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useModal } from "../../hooks/useModal";
 
 import axios from "axios";
 import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
@@ -13,12 +12,10 @@ import { toast } from "react-toastify";
 
 const Post = ({ post, refresh }) => {
   const { data: session } = useSession();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [unsaving, setUnsaving] = useState(false);
-
-  const { openModal, toggleModal } = useModal();
-  const router = useRouter();
+  const { value: dropdownOpen, toggleValue: toggleDropdownOpen } = useToggle();
+  const { value: saving, toggleValue: toggleSaving } = useToggle();
+  const { value: unsaving, toggleValue: toggleUnsaving } = useToggle();
+  const { value: openModal, toggleValue: toggleModal } = useToggle();
 
   const alreadySaved = post?.saved?.filter(
     (item) => item.postedBy._id === session?.user?.uid
@@ -34,47 +31,45 @@ const Post = ({ post, refresh }) => {
         toast.success("Post deleted!");
         refresh();
       })
-      .catch((error) => {
-        toast.error(
-          `Couldn't delete the post due to an error: ${error.message}`
-        );
+      .catch((err) => {
+        toast.error(`Couldn't delete the post due to an error: ${err.message}`);
       });
   };
 
   const saveOrUnsavePost = (postId) => {
     if (alreadySaved?.length === 0) {
-      setSaving(true);
+      toggleSaving();
       axios
         .post(
           `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=save`
         )
         .then(() => {
-          setSaving(false);
-          setDropdownOpen(false);
+          toggleSaving();
+          toggleDropdownOpen();
           refresh();
           toast.success("Post saved!");
         })
         .catch((error) => {
-          setSaving(false);
+          toggleSaving();
           toast.error(
             `There was an error saving this post: ${error.message}... Try again.`
           );
         });
     }
     if (alreadySaved?.length > 0) {
-      setUnsaving(true);
+      toggleUnsaving();
       axios
         .post(
           `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=unsave`
         )
         .then(() => {
-          setUnsaving(false);
-          setDropdownOpen(false);
+          toggleUnsaving();
+          toggleDropdownOpen();
           refresh();
           toast.success("Post Unsaved!");
         })
         .catch((error) => {
-          setUnsaving(false);
+          toggleUnsaving();
           toast.error(
             `There was an error unsaving this post: ${error.message}... Try again.`
           );
@@ -93,8 +88,8 @@ const Post = ({ post, refresh }) => {
           />
           <div
             className="flex items-center justify-center w-5 h-5 transition duration-150 ease-in-out bg-white rounded-sm cursor-pointer hover:bg-gray-200"
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            aria-label="Open dropdown"
+            onClick={() => toggleDropdownOpen()}
+            aria-label="Toggle Dropdown"
           >
             {dropdownOpen ? (
               <HiOutlineChevronUp fontSize={16} />
