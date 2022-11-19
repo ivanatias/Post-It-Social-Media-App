@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Loading } from "../../components";
 import CommentsContainer from "./CommentsContainer";
 import Comment from "./Comment";
 import CommentsForm from "./CommentsForm";
 import { useField } from "../../hooks/useField.js";
+import { useToggle } from "../../hooks/useToggle";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { addComment, removeComment } from "../../services/comments";
@@ -15,7 +16,8 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
     handleValueChange: handleCommentChange,
     resetField: resetComment,
   } = useField();
-  const [addingComment, setAddingComment] = useState(false);
+  const { value: addingComment, toggleValue: toggleAddingComment } =
+    useToggle();
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
@@ -23,7 +25,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!commentInput) return;
-    setAddingComment(true);
+    toggleAddingComment(true);
     try {
       await addComment({
         postId: id,
@@ -35,7 +37,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
     } catch (err) {
       toast.error(`Couldn't add comment due to an error: ${err.message}`);
     } finally {
-      setAddingComment(false);
+      toggleAddingComment(false);
       resetComment();
     }
   };
