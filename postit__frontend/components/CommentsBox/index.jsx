@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { Loading, UserHeader } from "../../components";
+import { Loading } from "../../components";
 import CommentsContainer from "./CommentsContainer";
 import Comment from "./Comment";
 import { toast } from "react-toastify";
