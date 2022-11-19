@@ -9,8 +9,8 @@ import {
   Loading,
   CreatePostForm,
   UserHeader,
+  ConfirmModal,
 } from "../../components";
-import ConfirmModal from "../../components/Post/ConfirmModal";
 import { useData } from "../../hooks/useData";
 import { client } from "../../client/client";
 import { postQuery, postsByCategoryQuery } from "../../utils/data";
