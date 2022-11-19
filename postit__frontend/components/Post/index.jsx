@@ -5,8 +5,9 @@ import UserHeader from "../UserHeader";
 import Image from "next/image";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
+import { deletePost } from "../../services/post/deletePost";
+import { saveOrUnsavePost } from "../../services/post/saveOrUnsavePost";
 
-import axios from "axios";
 import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { toast } from "react-toastify";
 
@@ -17,63 +18,58 @@ const Post = ({ post, refresh }) => {
   const { value: unsaving, toggleValue: toggleUnsaving } = useToggle();
   const { value: openModal, toggleValue: toggleModal } = useToggle();
 
-  const alreadySaved = post?.saved?.filter(
+  const alreadySaved = post.saved.some(
     (item) => item.postedBy._id === session?.user?.uid
   );
 
-  const deletePost = (postId) => {
+  const handleDeletePost = async (postId) => {
     if (!postId) return;
-    axios
-      .post("/api/posts/deletePost", {
-        postId: postId,
-      })
-      .then(() => {
-        toast.success("Post deleted!");
-        refresh();
-      })
-      .catch((err) => {
-        toast.error(`Couldn't delete the post due to an error: ${err.message}`);
-      });
+    try {
+      await deletePost(postId);
+      toast.success("Post deleted!");
+      refresh();
+    } catch (err) {
+      toast.error(`Couldn't delete the post due to an error: ${err.message}`);
+    }
   };
 
-  const saveOrUnsavePost = (postId) => {
-    if (alreadySaved?.length === 0) {
+  const handleSavePost = async (postId) => {
+    try {
       toggleSaving();
-      axios
-        .post(
-          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=save`
-        )
-        .then(() => {
-          toggleSaving();
-          toggleDropdownOpen();
-          refresh();
-          toast.success("Post saved!");
-        })
-        .catch((error) => {
-          toggleSaving();
-          toast.error(
-            `There was an error saving this post: ${error.message}... Try again.`
-          );
-        });
+      await saveOrUnsavePost({
+        postId,
+        userId: session?.user?.uid,
+        action: "save",
+      });
+      refresh();
+      toast.success("Post saved!");
+    } catch (err) {
+      toast.error(
+        `There was an error saving this post: ${err.message}... Try again.`
+      );
+    } finally {
+      toggleSaving();
+      toggleDropdownOpen();
     }
-    if (alreadySaved?.length > 0) {
+  };
+
+  const handleUnsavePost = async (postId) => {
+    try {
       toggleUnsaving();
-      axios
-        .post(
-          `/api/posts/saveOrUnsavePost?postId=${postId}&userId=${session?.user?.uid}&action=unsave`
-        )
-        .then(() => {
-          toggleUnsaving();
-          toggleDropdownOpen();
-          refresh();
-          toast.success("Post Unsaved!");
-        })
-        .catch((error) => {
-          toggleUnsaving();
-          toast.error(
-            `There was an error unsaving this post: ${error.message}... Try again.`
-          );
-        });
+      await saveOrUnsavePost({
+        postId,
+        userId: session?.user?.uid,
+        action: "unsave",
+      });
+      refresh();
+      toast.success("Post Unsaved!");
+    } catch (err) {
+      toast.error(
+        `There was an error unsaving this post: ${err.message}... Try again.`
+      );
+    } finally {
+      toggleUnsaving();
+      toggleDropdownOpen();
     }
   };
 
@@ -100,14 +96,15 @@ const Post = ({ post, refresh }) => {
         </div>
         {dropdownOpen && (
           <Dropdown
-            setDropdownOpen={setDropdownOpen}
+            toggleDropdownOpen={toggleDropdownOpen}
             toggleModal={toggleModal}
-            postedBy={post?.postedBy}
-            postImage={post?.image}
-            postId={post?._id}
+            postedBy={post.postedBy}
+            postImage={post.image}
+            postId={post._id}
             saving={saving}
             unsaving={unsaving}
-            saveOrUnsavePost={saveOrUnsavePost}
+            handleSavePost={handleSavePost}
+            handleUnsavePost={handleUnsavePost}
             alreadySaved={alreadySaved}
           />
         )}
@@ -128,7 +125,7 @@ const Post = ({ post, refresh }) => {
       {openModal && (
         <ConfirmModal
           toggleModal={toggleModal}
-          deletePost={deletePost}
+          deletePost={handleDeletePost}
           postId={post?._id}
         />
       )}
