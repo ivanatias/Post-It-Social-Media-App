@@ -6,7 +6,8 @@ import PostBody from "./PostBody";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
 import { deletePost } from "../../services/post/deletePost";
-import { saveOrUnsavePost } from "../../services/post/saveOrUnsavePost";
+import { savePost } from "../../services/post/savePost";
+import { unsavePost } from "../../services/post/unsavePost";
 import { toast } from "react-toastify";
 
 const Post = ({ post, refresh }) => {
@@ -34,10 +35,9 @@ const Post = ({ post, refresh }) => {
   const handleSavePost = async (postId) => {
     try {
       toggleSaving();
-      await saveOrUnsavePost({
+      await savePost({
         postId,
         userId: session?.user?.uid,
-        action: "save",
       });
       refresh();
       toast.success("Post saved!");
@@ -54,10 +54,9 @@ const Post = ({ post, refresh }) => {
   const handleUnsavePost = async (postId) => {
     try {
       toggleUnsaving();
-      await saveOrUnsavePost({
+      await unsavePost({
         postId,
         userId: session?.user?.uid,
-        action: "unsave",
       });
       refresh();
       toast.success("Post Unsaved!");
