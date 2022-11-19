@@ -8,6 +8,7 @@ import {
   SavedByBox,
   Loading,
   CreatePostForm,
+  UserHeader,
 } from "../../components";
 import ConfirmModal from "../../components/Post/ConfirmModal";
 import { useData } from "../../hooks/useData";
@@ -74,29 +75,18 @@ const PostDetails = () => {
       ogType="article"
       ogImage={postDetails?.image?.asset?.url}
     >
-      <section className="flex flex-col w-full gap-5 px-4 pt-4 pb-8 md:pt-12 md:pb-12 mx-auto max-w-7xl md:px-8 lg:px-10">
+      <section className="flex flex-col w-full gap-5 px-4 pt-4 pb-8 mx-auto md:pt-12 md:pb-12 max-w-7xl md:px-8 lg:px-10">
         {!editingPostMode ? (
           <>
             <div className="flex items-center justify-center gap-5">
               <h1 className="text-xl font-bold text-white 2xl:text-2xl">
                 Posted by
               </h1>
-              <div
-                className="flex items-center gap-2 cursor-pointer"
-                onClick={() =>
-                  router.push(`/user/${postDetails?.postedBy?._id}`)
-                }
-                aria-label="Visit User profile"
-              >
-                <img
-                  src={postDetails?.postedBy?.image}
-                  alt="User avatar"
-                  className="object-cover w-8 h-8 rounded-full"
-                />
-                <div className="text-sm font-bold text-white 2xl:text-base">
-                  {postDetails?.postedBy?.userTag}
-                </div>
-              </div>
+              <UserHeader
+                avatarUrl={postDetails.postedBy.image}
+                userTag={postDetails.postedBy.userTag}
+                userId={postDetails.postedBy._id}
+              />
             </div>
             <div className="flex items-center justify-center">
               <div className="relative w-full max-w-lg post__image-container">
@@ -113,17 +103,17 @@ const PostDetails = () => {
               </div>
             </div>
             {postDetails?.postedBy?._id === session?.user?.uid && (
-              <div className="flex w-full items-center justify-center gap-5">
+              <div className="flex items-center justify-center w-full gap-5">
                 <button
                   type="button"
-                  className="px-4 py-2 border-none outline-none flex items-center justify-center cursor-pointer text-base 2xl:text-lg text-gray-300 hover:text-white transition duration-150"
+                  className="flex items-center justify-center px-4 py-2 text-base text-gray-300 transition duration-150 border-none outline-none cursor-pointer 2xl:text-lg hover:text-white"
                   onClick={() => setEditingPostMode(true)}
                 >
                   Edit
                 </button>
                 <button
                   type="button"
-                  className="rounded-lg px-4 py-2 border-none outline-none flex items-center justify-center cursor-pointer text-base 2xl:text-lg text-red-500  hover:text-red-600 transition duration-150"
+                  className="flex items-center justify-center px-4 py-2 text-base text-red-500 transition duration-150 border-none rounded-lg outline-none cursor-pointer 2xl:text-lg hover:text-red-600"
                   onClick={() => toggleModal()}
                 >
                   Delete

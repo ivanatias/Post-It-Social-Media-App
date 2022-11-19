@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import ConfirmModal from "./ConfirmModal";
+import Dropdown from "./Dropdown";
+import UserHeader from "../UserHeader";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useModal } from "../../hooks/useModal";
-import ConfirmModal from "./ConfirmModal";
-import Dropdown from "./Dropdown";
 
 import axios from "axios";
 import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
@@ -85,21 +86,11 @@ const Post = ({ post, refresh }) => {
     <>
       <article className="relative p-3 transition duration-300 ease-in-out hover:shadow-md hover:shadow-gray-600">
         <div className="flex items-center justify-between w-full mb-3">
-          <div
-            className="flex items-center gap-2 cursor-pointer"
-            onClick={() => router.push(`/user/${post?.postedBy?._id}`)}
-            aria-label="Visit user profile"
-          >
-            <img
-              src={post?.postedBy?.image}
-              alt="User avatar"
-              className="object-cover w-8 h-8 rounded-full"
-            />
-            <div className="text-sm font-bold text-white 2xl:text-base">
-              {post?.postedBy?.userTag}
-            </div>
-          </div>
-
+          <UserHeader
+            avatarUrl={post.postedBy.image}
+            userTag={post.postedBy.userTag}
+            userId={post.postedBy._id}
+          />
           <div
             className="flex items-center justify-center w-5 h-5 transition duration-150 ease-in-out bg-white rounded-sm cursor-pointer hover:bg-gray-200"
             onClick={() => setDropdownOpen(!dropdownOpen)}

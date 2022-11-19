@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { Loading } from "../components";
+import { Loading, UserHeader } from "../components";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -68,19 +68,12 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
         {comments?.length > 0 ? (
           comments.map((comment) => (
             <div key={comment._key} className="flex flex-col gap-3 w-fit">
-              <div
-                className="flex items-center gap-2 cursor-pointer w-fit"
-                onClick={() => router.push(`/user/${comment.postedBy._id}`)}
-                aria-label="Visit user profile"
-              >
-                <img
-                  src={comment.postedBy.image}
-                  alt="User avatar"
-                  className="object-cover w-8 h-8 rounded-full"
+              <div className="flex items-center gap-2">
+                <UserHeader
+                  avatarUrl={comment.postedBy.image}
+                  userTag={comment.postedBy.userTag}
+                  userId={comment.postedBy._id}
                 />
-                <div className="text-sm font-bold text-white 2xl:text-base">
-                  {comment.postedBy.userTag}
-                </div>
                 {session?.user?.uid === comment.postedBy._id && (
                   <button
                     type="button"

@@ -1,4 +1,5 @@
 import React from "react";
+import { UserHeader } from "../components";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useRouter } from "next/router";
 
@@ -20,21 +21,12 @@ const SavedByBox = ({ saved, setOpenSavedByBox }) => {
         </div>
         <div className="flex flex-col w-full gap-5">
           {saved?.map((item) => (
-            <div
+            <UserHeader
               key={item._key}
-              className="flex items-center gap-3 cursor-pointer"
-              onClick={() => router.push(`/user/${item.postedBy._id}`)}
-              aria-label="Visit user profile"
-            >
-              <img
-                src={item.postedBy.image}
-                alt="User Avatar"
-                className="object-cover w-8 h-8 rounded-full"
-              />
-              <span className="text-sm font-bold text-white 2xl:text-base">
-                {item.postedBy.userTag}
-              </span>
-            </div>
+              avatarUrl={item.postedBy.image}
+              userTag={item.postedBy.userTag}
+              userId={item.postedBy._id}
+            />
           ))}
         </div>
       </div>
