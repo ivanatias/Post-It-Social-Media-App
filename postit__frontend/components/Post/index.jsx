@@ -1,14 +1,12 @@
 import React from "react";
 import ConfirmModal from "../ConfirmModal";
 import Dropdown from "./Dropdown";
-import UserHeader from "../UserHeader";
-import Image from "next/image";
+import PostHeader from "./PostHeader";
+import PostBody from "./PostBody";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
 import { deletePost } from "../../services/post/deletePost";
 import { saveOrUnsavePost } from "../../services/post/saveOrUnsavePost";
-
-import { HiOutlineChevronDown, HiOutlineChevronUp } from "react-icons/hi";
 import { toast } from "react-toastify";
 
 const Post = ({ post, refresh }) => {
@@ -76,24 +74,13 @@ const Post = ({ post, refresh }) => {
   return (
     <>
       <article className="relative p-3 transition duration-300 ease-in-out hover:shadow-md hover:shadow-gray-600">
-        <div className="flex items-center justify-between w-full mb-3">
-          <UserHeader
-            avatarUrl={post.postedBy.image}
-            userTag={post.postedBy.userTag}
-            userId={post.postedBy._id}
-          />
-          <div
-            className="flex items-center justify-center w-5 h-5 transition duration-150 ease-in-out bg-white rounded-sm cursor-pointer hover:bg-gray-200"
-            onClick={() => toggleDropdownOpen()}
-            aria-label="Toggle Dropdown"
-          >
-            {dropdownOpen ? (
-              <HiOutlineChevronUp fontSize={16} />
-            ) : (
-              <HiOutlineChevronDown fontSize={16} />
-            )}
-          </div>
-        </div>
+        <PostHeader
+          avatarUrl={post.postedBy.image}
+          userTag={post.postedBy.userTag}
+          userId={post.postedBy._id}
+          toggleDropdownOpen={toggleDropdownOpen}
+          dropdownOpen={dropdownOpen}
+        />
         {dropdownOpen && (
           <Dropdown
             toggleDropdownOpen={toggleDropdownOpen}
@@ -108,19 +95,7 @@ const Post = ({ post, refresh }) => {
             alreadySaved={alreadySaved}
           />
         )}
-        <div className="relative post__image-container">
-          {post?.image && (
-            <Image
-              src={post?.image?.asset?.url}
-              placeholder="blur"
-              blurDataURL={post?.image?.asset?.url}
-              layout="fill"
-              className="rounded-lg post__image"
-              alt="post"
-            />
-          )}
-        </div>
-        <p className="mt-3 text-sm text-white 2xl:text-base">{post?.title}</p>
+        <PostBody postImageUrl={post.image.asset.url} postTitle={post.title} />
       </article>
       {openModal && (
         <ConfirmModal
