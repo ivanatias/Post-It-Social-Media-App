@@ -25,7 +25,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!commentInput) return;
-    toggleAddingComment(true);
+    toggleAddingComment();
     try {
       await addComment({
         postId: id,
@@ -37,7 +37,7 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
     } catch (err) {
       toast.error(`Couldn't add comment due to an error: ${err.message}`);
     } finally {
-      toggleAddingComment(false);
+      toggleAddingComment();
       resetComment();
     }
   };
