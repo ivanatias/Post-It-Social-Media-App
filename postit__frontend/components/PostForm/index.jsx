@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import ImageUpload from "./ImageUpload";
+import Form from "./FormElements/Form";
+import InputsWrapper from "./FormElements/InputsWrapper";
+import AllFieldsText from "./FormElements/AllFieldsText";
+import CancelButton from "./FormElements/CancelButton";
+import FileInput from "./FormElements/FileInput";
+import SelectInput from "./FormElements/SelectInput";
+import SubmitButton from "./FormElements/SubmitButton";
+import TextInputs from "./FormElements/TextInputs";
 import { useRouter } from "next/router";
 import { useField } from "../../hooks/useField";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
-import { categories } from "../../utils/data";
 import { isCorrectImageType } from "../../utils/isCorrectImageType";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const CreatePostForm = ({
+const PostForm = ({
   postImageToEdit,
   postTitleToEdit,
   postDescriptionToEdit,
@@ -151,98 +158,34 @@ const CreatePostForm = ({
         imageUrl={postImage?.url}
         wrongImageType={wrongImageType}
       />
-      <form
-        onSubmit={editingPostMode ? editPost : addPost}
-        className="flex flex-col items-center w-full gap-8"
-      >
+      <Form onSubmit={editingPostMode ? editPost : addPost}>
         {!editingPostMode && (
-          <div className="flex flex-col items-center">
-            <label
-              htmlFor="upload-image"
-              className="text-gray-100 hover:text-white hover:border-white border-[1px] rounded-lg border-gray-100 px-4 py-1 transition duration-150 text-sm 2xl:text-base cursor-pointer"
-            >
-              {postImage ? "Replace image" : "Upload image"}
-            </label>
-            <input
-              type="file"
-              name="upload-image"
-              id="upload-image"
-              className="w-0 h-0"
-              onChange={addPostImage}
-            />
-          </div>
+          <FileInput onChange={addPostImage} postImage={postImage} />
         )}
-        {allFields && (
-          <p className="text-sm text-center text-red-500 2xl:text-base">
-            Please fill all required fields.
-          </p>
-        )}
-        <div className="flex flex-col w-full max-w-2xl gap-8">
-          <input
-            type="text"
-            className="border-[1px] border-gray-100 outline-none p-4 text-white placeholder:text-gray-400 bg-transparent rounded-lg"
-            placeholder="Post title"
-            value={postTitle}
-            onChange={handlePostTitleChange}
+        {allFields && <AllFieldsText />}
+        <InputsWrapper>
+          <TextInputs
+            postTitle={postTitle}
+            handlePostTitleChange={handlePostTitleChange}
+            postDescription={postDescription}
+            handlePostDescChange={handlePostDescChange}
           />
-          <textarea
-            className="max-h-[300px] overflow-y-auto min-h-[150px] border-[1px] border-gray-100 outline-none p-4 text-white placeholder:text-gray-400 bg-transparent rounded-lg"
-            rows={4}
-            placeholder="What's your post about?"
-            value={postDescription}
-            onChange={handlePostDescChange}
+          <SelectInput
+            postCategoryToEdit={postCategoryToEdit}
+            handlePostCategoryChange={handlePostCategoryChange}
           />
-          <select
-            className="p-3 border-[1px] border-gray-100 rounded-lg bg-transparent text-gray-400"
-            onChange={handlePostCategoryChange}
-          >
-            <option
-              value=""
-              disabled
-              selected={postCategoryToEdit ? false : true}
-              hidden
-            >
-              Select a category
-            </option>
-            {categories.map((category, index) => (
-              <option
-                key={category.name + index}
-                value={category.name}
-                className="text-black"
-                selected={postCategoryToEdit === category.name}
-              >
-                {category.name}
-              </option>
-            ))}
-          </select>
-          <button
-            disabled={
-              uploadingImage || creatingPost || wrongImageType || isEditingPost
-            }
-            type="submit"
-            className="flex items-center justify-center w-full px-2 py-4 text-base font-bold text-white transition duration-150 bg-red-500 border-none rounded-sm outline-none 2xl:text-lg hover:bg-red-700 disabled:opacity-40"
-          >
-            {isEditingPost
-              ? "Editing post..."
-              : editingPostMode
-              ? "Edit Post"
-              : creatingPost
-              ? "Creating post..."
-              : "Create Post"}
-          </button>
-          {editingPostMode && (
-            <button
-              type="button"
-              className="flex items-center justify-center w-full text-base text-gray-300 transition duration-150 2xl:text-lg hover:text-white"
-              onClick={() => setEditingPostMode(false)}
-            >
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
+          <SubmitButton
+            uploadingImage={uploadingImage}
+            creatingPost={creatingPost}
+            wrongImageType={wrongImageType}
+            isEditingPost={isEditingPost}
+            editingPostMode={editingPostMode}
+          />
+          <CancelButton setEditingPostMode={setEditingPostMode} />
+        </InputsWrapper>
+      </Form>
     </>
   );
 };
 
-export default CreatePostForm;
+export default PostForm;
