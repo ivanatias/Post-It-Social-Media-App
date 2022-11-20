@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import Image from "next/image";
+import ImageUpload from "./ImageUpload";
 import { useRouter } from "next/router";
 import { useField } from "../../hooks/useField";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
 import { categories } from "../../utils/data";
-import { AiOutlineUpload } from "react-icons/ai";
+import { isCorrectImageType } from "../../utils/isCorrectImageType";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -57,42 +57,40 @@ const CreatePostForm = ({
   const addPostImage = (e) => {
     const selectedFile = e.target.files[0];
 
-    if (
-      selectedFile.type === "image/jpeg" ||
-      selectedFile.type === "image/png" ||
-      selectedFile.type === "image/svg" ||
-      selectedFile.type === "image/gif" ||
-      selectedFile.type === "image/jpg" ||
-      selectedFile.type === "image/tiff"
-    ) {
-      toggleWrongImageType(false);
-      toggleUploadingImage();
-      const form = new FormData();
-      form.append("uploadedFile", selectedFile);
-      axios
-        .post("/api/posts/uploadImage", form, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((data) => {
-          if (data.status === 200) {
-            const results = data.data;
-            setPostImage(results);
-            toggleUploadingImage();
-            toast.success("Image uploaded!");
-          } else {
-            toggleUploadingImage();
-            toast.error("Error uploading image, try again.");
-          }
-        })
-        .catch((error) => {
-          toggleUploadingImage();
-          toast.error(`Error uploading image ${error.message}`);
-        });
-    } else {
+    if (!selectedFile) return;
+
+    toggleWrongImageType(false);
+
+    if (!isCorrectImageType(selectedFile)) {
       toggleWrongImageType(true);
+      setPostImage(null);
+      return;
     }
+
+    toggleUploadingImage();
+    const form = new FormData();
+    form.append("uploadedFile", selectedFile);
+    axios
+      .post("/api/posts/uploadImage", form, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((data) => {
+        if (data.status === 200) {
+          const results = data.data;
+          setPostImage(results);
+          toggleUploadingImage();
+          toast.success("Image uploaded!");
+        } else {
+          toggleUploadingImage();
+          toast.error("Error uploading image, try again.");
+        }
+      })
+      .catch((error) => {
+        toggleUploadingImage();
+        toast.error(`Error uploading image ${error.message}`);
+      });
   };
 
   const addPost = (e) => {
@@ -148,53 +146,11 @@ const CreatePostForm = ({
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full gap-5">
-        <div
-          className={`relative w-full mt-5 h-[450px] max-w-2xl rounded-2xl border-2 border-gray-300 flex flex-col items-center justify-center bg-transparent`}
-        >
-          {uploadingImage ? (
-            <div className="flex flex-col items-center">
-              <p className="text-sm font-bold text-gray-400 2xl:text-base">
-                Uploading...
-              </p>
-              <p className="mt-2 text-xs text-gray-400 2xl:text-sm">
-                Please wait for a few seconds
-              </p>
-            </div>
-          ) : postImage && !wrongImageType ? (
-            <Image
-              src={postImage?.url}
-              placeholder="blur"
-              blurDataURL={postImage?.url}
-              layout="fill"
-              alt="Image uploaded by user"
-              className="rounded-2xl"
-              objectFit="contain"
-            />
-          ) : (
-            <>
-              <div className="flex flex-col items-center">
-                {wrongImageType ? (
-                  <p className="text-sm text-center text-red-500 2xl:text-base">
-                    Please select an image with the correct format.
-                  </p>
-                ) : (
-                  <>
-                    <AiOutlineUpload fontSize={150} className="text-gray-100" />
-                    <p className="text-sm text-center text-gray-400 2xl:text-base">
-                      You can upload an image with a JPEG, PNG, GIF, SVG, or
-                      TIFF format.
-                    </p>
-                    <p className="mt-5 text-xs font-bold text-center text-gray-400 2xl:text-sm">
-                      High Quality images with less than 20MB are recommended.
-                    </p>
-                  </>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+      <ImageUpload
+        uploadingImage={uploadingImage}
+        imageUrl={postImage?.url}
+        wrongImageType={wrongImageType}
+      />
       <form
         onSubmit={editingPostMode ? editPost : addPost}
         className="flex flex-col items-center w-full gap-8"
