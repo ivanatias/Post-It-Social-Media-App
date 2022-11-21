@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ImageUpload from "./ImageUpload";
+import ImageUploadContainer from "./ImageUpload/ImageUploadContainer";
 import Form from "./FormElements/Form";
 import InputsWrapper from "./FormElements/InputsWrapper";
 import AllFieldsText from "./FormElements/AllFieldsText";
@@ -153,11 +154,13 @@ const PostForm = ({
 
   return (
     <>
-      <ImageUpload
-        uploadingImage={uploadingImage}
-        imageUrl={postImage?.url}
-        wrongImageType={wrongImageType}
-      />
+      <ImageUploadContainer>
+        <ImageUpload
+          uploadingImage={uploadingImage}
+          imageUrl={postImage?.url}
+          wrongImageType={wrongImageType}
+        />
+      </ImageUploadContainer>
       <Form onSubmit={editingPostMode ? editPost : addPost}>
         {!editingPostMode && (
           <FileInput onChange={addPostImage} postImage={postImage} />
@@ -181,7 +184,9 @@ const PostForm = ({
             isEditingPost={isEditingPost}
             editingPostMode={editingPostMode}
           />
-          <CancelButton setEditingPostMode={setEditingPostMode} />
+          {editingPostMode && (
+            <CancelButton setEditingPostMode={setEditingPostMode} />
+          )}
         </InputsWrapper>
       </Form>
     </>
