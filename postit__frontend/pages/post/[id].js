@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { dehydrate, QueryClient } from "react-query";
 import {
   Layout,
@@ -8,9 +7,17 @@ import {
   SavedByBox,
   Loading,
   PostForm,
-  UserHeader,
   ConfirmModal,
 } from "../../components";
+import {
+  Header,
+  PostImage,
+  ActionButtons,
+  PostContent,
+  SavedByUsers,
+  Comments,
+  PageWrapper,
+} from "../../components/Post-Details-Page";
 import { useData } from "../../hooks/useData";
 import { client } from "../../client/client";
 import { postQuery, postsByCategoryQuery } from "../../utils/data";
@@ -73,111 +80,32 @@ const PostDetails = () => {
       ogType="article"
       ogImage={postDetails?.image?.asset?.url}
     >
-      <section className="flex flex-col w-full gap-5 px-4 pt-4 pb-8 mx-auto md:pt-12 md:pb-12 max-w-7xl md:px-8 lg:px-10">
+      <PageWrapper>
         {!editingPostMode ? (
           <>
-            <div className="flex items-center justify-center gap-5">
-              <h1 className="text-xl font-bold text-white 2xl:text-2xl">
-                Posted by
-              </h1>
-              <UserHeader
-                avatarUrl={postDetails.postedBy.image}
-                userTag={postDetails.postedBy.userTag}
-                userId={postDetails.postedBy._id}
+            <Header
+              avatarUrl={postDetails.postedBy.image}
+              userTag={postDetails.postedBy.userTag}
+              userId={postDetails.postedBy._id}
+            />
+            <PostImage imageUrl={postDetails.image.asset.url} />
+            {postDetails.postedBy._id === session?.user?.uid && (
+              <ActionButtons
+                toggleEditingPostMode={toggleEditingPostMode}
+                toggleOpenModal={toggleOpenModal}
               />
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="relative w-full max-w-lg post__image-container">
-                <Image
-                  src={postDetails?.image?.asset?.url}
-                  placeholder="blur"
-                  blurDataURL={postDetails?.image?.asset?.url}
-                  className="rounded-lg post__image"
-                  layout="fill"
-                  objectFit="contain"
-                  alt="User's post image"
-                  priority
-                />
-              </div>
-            </div>
-            {postDetails?.postedBy?._id === session?.user?.uid && (
-              <div className="flex items-center justify-center w-full gap-5">
-                <button
-                  type="button"
-                  className="flex items-center justify-center px-4 py-2 text-base text-gray-300 transition duration-150 border-none outline-none cursor-pointer 2xl:text-lg hover:text-white"
-                  onClick={toggleEditingPostMode}
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  className="flex items-center justify-center px-4 py-2 text-base text-red-500 transition duration-150 border-none rounded-lg outline-none cursor-pointer 2xl:text-lg hover:text-red-600"
-                  onClick={toggleOpenModal}
-                >
-                  Delete
-                </button>
-              </div>
             )}
-            <h2 className="text-base font-bold text-white 2xl:text-xl">
-              {postDetails?.title}
-            </h2>
-            <p className="text-sm text-white 2xl:text-lg">
-              {postDetails?.description}
-            </p>
-            <span className="mb-2 text-base font-bold text-white 2xl:text-xl">
-              Category
-            </span>
-
-            <span className="flex items-center justify-center px-6 py-2 text-xs text-white bg-gray-800 rounded-lg w-fit 2xl:text-base">
-              {postDetails?.category}
-            </span>
-
-            <div className="flex flex-col gap-2">
-              <span className="mb-2 text-base font-bold text-white 2xl:text-xl">
-                Saved by{" "}
-                {postDetails?.saved?.length > 0
-                  ? `(${postDetails?.saved.length})`
-                  : "(0)"}
-              </span>
-              {postDetails?.saved?.length > 0 ? (
-                <div
-                  className="flex flex-wrap items-center cursor-pointer max-w-[250px]"
-                  onClick={toggleSavedByBox}
-                  aria-label="Users who saved this post"
-                >
-                  {postDetails?.saved
-                    .map((item) => (
-                      <img
-                        key={item._key}
-                        src={item.postedBy.image}
-                        alt="User Avatar"
-                        className="object-cover w-8 h-8 rounded-full mr-[-6px]"
-                      />
-                    ))
-                    .slice(0, 6)
-                    .concat(
-                      <span
-                        key={"dots"}
-                        className={`h-8 ml-2 text-xl text-white ${
-                          postDetails?.saved.length < 6 && "hidden"
-                        }`}
-                      >
-                        ...
-                      </span>
-                    )}
-                </div>
-              ) : (
-                <span className="text-xs text-gray-400 2xl:text-base">
-                  No one has saved this post yet...
-                </span>
-              )}
-            </div>
-            <span className="mb-2 text-base font-bold text-white 2xl:text-xl">
-              Comments{" "}
-              {postDetails?.comments?.length > 0
-                ? `(${postDetails?.comments.length})`
-                : "(0)"}
-            </span>
+            <PostContent
+              postTitle={postDetails.title}
+              postDescription={postDetails.description}
+              postCategory={postDetails.category}
+            />
+            <SavedByUsers
+              numOfSaves={postDetails.saved.length}
+              saves={postDetails.saved}
+              toggleSavedByBox={toggleSavedByBox}
+            />
+            <Comments numOfComments={postDetails.comments.length} />
             <CommentsBox
               comments={postDetails?.comments}
               refresh={refetchPostDetails}
@@ -221,7 +149,7 @@ const PostDetails = () => {
             deletePost={handleDeletePost}
           />
         )}
-      </section>
+      </PageWrapper>
     </Layout>
   );
 };
