@@ -13,9 +13,11 @@ import { useRouter } from "next/router";
 import { useField } from "../../hooks/useField";
 import { useToggle } from "../../hooks/useToggle";
 import { useSession } from "next-auth/react";
+import { addPostImage } from "../../services/post/addPostImage";
+import { addPost } from "../../services/post/addPost";
+import { editPost } from "../../services/post/editPost";
 import { isCorrectImageType } from "../../utils/isCorrectImageType";
 import { toast } from "react-toastify";
-import axios from "axios";
 
 const PostForm = ({
   postImageToEdit,
@@ -62,7 +64,7 @@ const PostForm = ({
     }, 4000);
   };
 
-  const addPostImage = (e) => {
+  const handleAddPostImage = async (e) => {
     const selectedFile = e.target.files[0];
 
     if (!selectedFile) return;
@@ -76,80 +78,63 @@ const PostForm = ({
     }
 
     toggleUploadingImage();
-    const form = new FormData();
-    form.append("uploadedFile", selectedFile);
-    axios
-      .post("/api/posts/uploadImage", form, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((data) => {
-        if (data.status === 200) {
-          const results = data.data;
-          setPostImage(results);
-          toggleUploadingImage();
-          toast.success("Image uploaded!");
-        } else {
-          toggleUploadingImage();
-          toast.error("Error uploading image, try again.");
-        }
-      })
-      .catch((error) => {
-        toggleUploadingImage();
-        toast.error(`Error uploading image ${error.message}`);
-      });
+
+    try {
+      const { data: image, status } = await addPostImage(selectedFile);
+      if (status !== 200) throw new Error("Error uploading image");
+      setPostImage(image);
+      toast.success("Image uploaded");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      toggleUploadingImage();
+    }
   };
 
-  const addPost = (e) => {
+  const handleAddPost = async (e) => {
     e.preventDefault();
     if (!postTitle || !postImage || !postCategory) {
       return showAllFieldsMessage();
-    } else {
+    }
+
+    toggleCreatingPost();
+
+    try {
+      await addPost({
+        postImage,
+        postTitle,
+        postDescription,
+        postCategory,
+        userId: session?.user?.uid,
+      });
+      toast.success("You created a post!");
+      router.push("/");
+    } catch (err) {
+      toast.error(`Error creating post, try again. ${err.message}`);
+    } finally {
       toggleCreatingPost();
-      axios
-        .post("/api/posts/createPost", {
-          postImage: postImage,
-          postTitle: postTitle,
-          postDescription: postDescription,
-          postCategory: postCategory,
-          userId: session?.user?.uid,
-        })
-        .then(() => {
-          toast.success("You created a post!");
-          toggleCreatingPost();
-          router.push("/");
-        })
-        .catch((error) => {
-          toggleCreatingPost();
-          toast.error(`Error creating post, try again. ${error.message}`);
-        });
     }
   };
 
-  const editPost = (e) => {
+  const handleEditPost = async (e) => {
     e.preventDefault();
+
     if (!postTitle || !postCategory) {
       return showAllFieldsMessage();
     }
+
     toggleisEditingPost();
-    axios
-      .post("/api/posts/editPost", {
-        postId: id,
-        postTitle: postTitle,
-        postDescription: postDescription,
-        postCategory: postCategory,
-      })
-      .then(() => {
-        toast.success("Post edited");
-        toggleisEditingPost();
-        refresh();
-        setEditingPostMode(false);
-      })
-      .catch((error) => {
-        toggleisEditingPost();
-        toast.error(`Error editing post: ${error.message}`);
-      });
+
+    try {
+      await editPost({ postId: id, postTitle, postDescription, postCategory });
+      toast.success("Post edited");
+      refresh();
+      setEditingPostMode(false);
+    } catch (err) {
+      toast.error(`Error editing post: ${err.message}`);
+    } finally {
+      toggleisEditingPost();
+    }
   };
 
   return (
@@ -161,9 +146,9 @@ const PostForm = ({
           wrongImageType={wrongImageType}
         />
       </ImageUploadContainer>
-      <Form onSubmit={editingPostMode ? editPost : addPost}>
+      <Form onSubmit={editingPostMode ? handleEditPost : handleAddPost}>
         {!editingPostMode && (
-          <FileInput onChange={addPostImage} postImage={postImage} />
+          <FileInput onChange={handleAddPostImage} postImage={postImage} />
         )}
         {allFields && <AllFieldsText />}
         <InputsWrapper>
