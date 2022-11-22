@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { dehydrate, QueryClient } from "react-query";
 import {
@@ -16,17 +16,22 @@ import { client } from "../../client/client";
 import { postQuery, postsByCategoryQuery } from "../../utils/data";
 import { fetchPost, fetchPostsByCategory } from "../../utils/fetchers";
 import { useRouter } from "next/router";
-import { useModal } from "../../hooks/useModal";
+import { useToggle } from "../../hooks/useToggle";
 import { getSession, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { deletePost } from "../../services/post/deletePost";
 
 const PostDetails = () => {
-  const [openSavedByBox, setOpenSavedByBox] = useState(false);
-  const [editingPostMode, setEditingPostMode] = useState(false);
-  const [deletingPost, setDeletingPost] = useState(false);
   const { data: session } = useSession();
-  const { openModal, toggleModal } = useModal();
+
+  const { value: openSavedByBox, toggleValue: toggleSavedByBox } = useToggle();
+
+  const { value: editingPostMode, toggleValue: toggleEditingPostMode } =
+    useToggle();
+
+  const { value: deletingPost, toggleValue: toggleDeletingPost } = useToggle();
+
+  const { value: openModal, toggleValue: toggleOpenModal } = useToggle();
 
   const router = useRouter();
   const { id } = router.query;
@@ -49,7 +54,7 @@ const PostDetails = () => {
   );
 
   const handleDeletePost = async (postId) => {
-    setDeletingPost(true);
+    toggleDeletingPost();
     try {
       await deletePost(postId);
       toast.success("Post deleted!");
@@ -57,7 +62,7 @@ const PostDetails = () => {
     } catch (err) {
       toast.error(`Couldn't delete the post due to an error: ${err.message}`);
     } finally {
-      setDeletingPost(false);
+      toggleDeletingPost();
     }
   };
 
@@ -100,14 +105,14 @@ const PostDetails = () => {
                 <button
                   type="button"
                   className="flex items-center justify-center px-4 py-2 text-base text-gray-300 transition duration-150 border-none outline-none cursor-pointer 2xl:text-lg hover:text-white"
-                  onClick={() => setEditingPostMode(true)}
+                  onClick={toggleEditingPostMode}
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   className="flex items-center justify-center px-4 py-2 text-base text-red-500 transition duration-150 border-none rounded-lg outline-none cursor-pointer 2xl:text-lg hover:text-red-600"
-                  onClick={() => toggleModal()}
+                  onClick={toggleOpenModal}
                 >
                   Delete
                 </button>
@@ -193,7 +198,7 @@ const PostDetails = () => {
             {openSavedByBox && (
               <SavedByBox
                 saved={postDetails?.saved}
-                setOpenSavedByBox={setOpenSavedByBox}
+                toggleOpenSavedByBox={toggleOpenSavedByBox}
               />
             )}
             {deletingPost && <Loading />}
@@ -201,7 +206,7 @@ const PostDetails = () => {
         ) : (
           <PostForm
             editingPostMode={editingPostMode}
-            setEditingPostMode={setEditingPostMode}
+            toggleEditingPostMode={toggleEditingPostMode}
             postTitleToEdit={postDetails?.title}
             postDescriptionToEdit={postDetails?.description}
             postImageToEdit={postDetails?.image?.asset}
@@ -212,7 +217,7 @@ const PostDetails = () => {
         {openModal && (
           <ConfirmModal
             postId={id}
-            toggleModal={toggleModal}
+            toggleOpenModal={toggleOpenModal}
             deletePost={handleDeletePost}
           />
         )}

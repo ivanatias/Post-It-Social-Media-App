@@ -3,7 +3,7 @@ import { UserHeader } from "../components";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { useRouter } from "next/router";
 
-const SavedByBox = ({ saved, setOpenSavedByBox }) => {
+const SavedByBox = ({ saved, toggleOpenSavedByBox }) => {
   const router = useRouter();
   return (
     <div className="fixed top-0 left-0 z-50 grid w-full h-full bg-black/40 place-content-center">
@@ -16,7 +16,7 @@ const SavedByBox = ({ saved, setOpenSavedByBox }) => {
             fontSize={25}
             className="text-white cursor-pointer"
             aria-label="Close"
-            onClick={() => setOpenSavedByBox(false)}
+            onClick={toggleOpenSavedByBox}
           />
         </div>
         <div className="flex flex-col w-full gap-5">

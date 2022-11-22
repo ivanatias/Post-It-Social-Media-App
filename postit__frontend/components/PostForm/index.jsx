@@ -25,7 +25,7 @@ const PostForm = ({
   postDescriptionToEdit,
   postCategoryToEdit,
   editingPostMode,
-  setEditingPostMode,
+  toggleEditingPostMode,
   refresh,
 }) => {
   const { data: session } = useSession();
@@ -170,7 +170,7 @@ const PostForm = ({
             editingPostMode={editingPostMode}
           />
           {editingPostMode && (
-            <CancelButton setEditingPostMode={setEditingPostMode} />
+            <CancelButton toggleEditingPostMode={toggleEditingPostMode} />
           )}
         </InputsWrapper>
       </Form>
