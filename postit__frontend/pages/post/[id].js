@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { useModal } from "../../hooks/useModal";
 import { getSession, useSession } from "next-auth/react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { deletePost } from "../../services/post/deletePost";
 
 const PostDetails = () => {
   const [openSavedByBox, setOpenSavedByBox] = useState(false);
@@ -48,24 +48,17 @@ const PostDetails = () => {
     id
   );
 
-  const deletePost = (postId) => {
-    if (!postId) return;
+  const handleDeletePost = async (postId) => {
     setDeletingPost(true);
-    axios
-      .post("/api/posts/deletePost", {
-        postId: postId,
-      })
-      .then(() => {
-        setDeletingPost(false);
-        toast.success("Post deleted!");
-        router.push("/");
-      })
-      .catch((error) => {
-        setDeletingPost(false);
-        toast.error(
-          `Couldn't delete the post due to an error: ${error.message}`
-        );
-      });
+    try {
+      await deletePost(postId);
+      toast.success("Post deleted!");
+      router.push("/");
+    } catch (err) {
+      toast.error(`Couldn't delete the post due to an error: ${err.message}`);
+    } finally {
+      setDeletingPost(false);
+    }
   };
 
   return (
@@ -220,7 +213,7 @@ const PostDetails = () => {
           <ConfirmModal
             postId={id}
             toggleModal={toggleModal}
-            deletePost={deletePost}
+            deletePost={handleDeletePost}
           />
         )}
       </section>
