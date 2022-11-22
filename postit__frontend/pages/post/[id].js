@@ -142,7 +142,7 @@ const PostDetails = () => {
               {postDetails?.saved?.length > 0 ? (
                 <div
                   className="flex flex-wrap items-center cursor-pointer max-w-[250px]"
-                  onClick={() => setOpenSavedByBox(true)}
+                  onClick={toggleSavedByBox}
                   aria-label="Users who saved this post"
                 >
                   {postDetails?.saved
@@ -198,7 +198,7 @@ const PostDetails = () => {
             {openSavedByBox && (
               <SavedByBox
                 saved={postDetails?.saved}
-                toggleOpenSavedByBox={toggleOpenSavedByBox}
+                toggleSavedByBox={toggleSavedByBox}
               />
             )}
             {deletingPost && <Loading />}

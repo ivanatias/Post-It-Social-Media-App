@@ -1,10 +1,8 @@
 import React from "react";
 import { UserHeader } from "../components";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { useRouter } from "next/router";
 
-const SavedByBox = ({ saved, toggleOpenSavedByBox }) => {
-  const router = useRouter();
+const SavedByBox = ({ saved, toggleSavedByBox }) => {
   return (
     <div className="fixed top-0 left-0 z-50 grid w-full h-full bg-black/40 place-content-center">
       <div className="relative flex flex-col items-center min-w-[270px] max-h-[500px] overflow-y-auto p-5 text-black shadow-md md:left-[112px] bg-neutral-900 rounded-2xl">
@@ -16,7 +14,7 @@ const SavedByBox = ({ saved, toggleOpenSavedByBox }) => {
             fontSize={25}
             className="text-white cursor-pointer"
             aria-label="Close"
-            onClick={toggleOpenSavedByBox}
+            onClick={() => toggleSavedByBox()}
           />
         </div>
         <div className="flex flex-col w-full gap-5">
