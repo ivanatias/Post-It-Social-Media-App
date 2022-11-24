@@ -6,7 +6,7 @@ const SelectInput = ({ postCategoryToEdit, handlePostCategoryChange }) => (
     className="p-3 border-[1px] border-gray-100 rounded-lg bg-transparent text-gray-400"
     onChange={handlePostCategoryChange}
   >
-    <option value="" disabled selected={postCategoryToEdit} hidden>
+    <option value="" selected={!Boolean(postCategoryToEdit)}>
       Select a category
     </option>
     {categories.map((category, index) => (
