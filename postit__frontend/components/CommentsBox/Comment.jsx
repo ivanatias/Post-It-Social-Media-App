@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 
 const Comment = ({ comment: { postedBy, comment, _key }, removeComment }) => {
   const { data: session } = useSession();
+
   return (
     <div key={_key} className="flex flex-col gap-3 w-fit">
       <div className="flex items-center gap-2">
