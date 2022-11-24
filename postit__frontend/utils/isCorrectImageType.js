@@ -1,12 +1,3 @@
-/* const acceptedImageTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/svg",
-  "image/gif",
-  "image/jpg",
-  "image/tiff",
-]; */
-
 const acceptedImageTypes = {
   jpeg: "image/jpeg",
   png: "image/png",
