@@ -34,7 +34,7 @@ const Dropdown = ({
         className="flex items-center gap-2 px-2 py-3 text-xs font-semibold transition duration-150 ease-in-out rounded-md shadow-md cursor-pointer lg:text-sm hover:bg-gray-100"
         href={`${postImage?.asset?.url}?dl=`}
         download
-        onClick={toggleDropdownOpen}
+        onClick={() => toggleDropdownOpen()}
       >
         <AiOutlineDownload fontSize={16} />
         Download
