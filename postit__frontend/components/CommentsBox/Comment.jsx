@@ -16,7 +16,7 @@ const Comment = ({ comment: { postedBy, comment, _key }, removeComment }) => {
           <button
             type="button"
             className="rounded-xl flex items-center justify-center px-2 py-1 ml-2 text-sm text-gray-300 transition duration-150 ease-in-out bg-transparent border-[1px] border-gray-300 outline-none cursor-pointer 2xl:text-base hover:text-white hover:border-white"
-            onClick={(e) => removeComment(_key)}
+            onClick={() => removeComment(_key)}
           >
             Delete
           </button>

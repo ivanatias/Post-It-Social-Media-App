@@ -16,8 +16,10 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
     handleValueChange: handleCommentChange,
     resetField: resetComment,
   } = useField();
+
   const { value: addingComment, toggleValue: toggleAddingComment } =
     useToggle();
+
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
