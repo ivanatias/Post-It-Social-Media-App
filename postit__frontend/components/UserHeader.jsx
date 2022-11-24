@@ -10,7 +10,7 @@ const UserHeader = ({ avatarUrl, userTag, userId }) => {
       onClick={() => router.push(`/user/${userId}`)}
       aria-label="Visit user profile"
     >
-      <UserAvatar avatarUrl={avatarUrl} />
+      {avatarUrl && <UserAvatar avatarUrl={avatarUrl} />}
       <div className="text-sm font-bold text-white 2xl:text-base">
         {userTag}
       </div>

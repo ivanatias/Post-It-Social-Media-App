@@ -84,28 +84,28 @@ const PostDetails = () => {
         {!editingPostMode ? (
           <>
             <Header
-              avatarUrl={postDetails.postedBy.image}
-              userTag={postDetails.postedBy.userTag}
-              userId={postDetails.postedBy._id}
+              avatarUrl={postDetails?.postedBy?.image}
+              userTag={postDetails?.postedBy?.userTag}
+              userId={postDetails?.postedBy?._id}
             />
-            <PostImage imageUrl={postDetails.image.asset.url} />
-            {postDetails.postedBy._id === session?.user?.uid && (
+            <PostImage imageUrl={postDetails?.image?.asset?.url} />
+            {postDetails?.postedBy?._id === session?.user?.uid && (
               <ActionButtons
                 toggleEditingPostMode={toggleEditingPostMode}
                 toggleOpenModal={toggleOpenModal}
               />
             )}
             <PostContent
-              postTitle={postDetails.title}
-              postDescription={postDetails.description}
-              postCategory={postDetails.category}
+              postTitle={postDetails?.title}
+              postDescription={postDetails?.description}
+              postCategory={postDetails?.category}
             />
             <SavedByUsers
-              numOfSaves={postDetails.saved.length}
-              saves={postDetails.saved}
+              numOfSaves={postDetails?.saved?.length}
+              saves={postDetails?.saved}
               toggleSavedByBox={toggleSavedByBox}
             />
-            <Comments numOfComments={postDetails.comments.length} />
+            <Comments numOfComments={postDetails?.comments?.length} />
             <CommentsBox
               comments={postDetails?.comments}
               refresh={refetchPostDetails}

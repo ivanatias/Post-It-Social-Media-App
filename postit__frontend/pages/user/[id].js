@@ -51,20 +51,20 @@ const UserProfile = () => {
     >
       <CoverImage firstPostCategory={postsByUser[0]?.category} />
       <PageWrapper>
-        <User imageUrl={user.image} username={user.userName} />
-        {user._id === session?.user?.uid && <LogoutButton />}
+        <User imageUrl={user?.image} username={user?.userName} />
+        {user?._id === session?.user?.uid && <LogoutButton />}
         <PostsList
-          numOfPosts={postsByUser.length}
+          numOfPosts={postsByUser?.length}
           descText="Posts by"
-          username={user.userName}
+          username={user?.userName}
           posts={postsByUser}
           refresh={refetchPostsByUser}
           isFetching={isFetchingPostsByUser}
         />
         <PostsList
-          numOfPosts={postsSavedByUser.length}
+          numOfPosts={postsSavedByUser?.length}
           descText="Saved by"
-          username={user.userName}
+          username={user?.userName}
           posts={postsSavedByUser}
           refresh={refetchPostsSavedByUser}
           isFetching={isFetchingPostsSavedByUser}

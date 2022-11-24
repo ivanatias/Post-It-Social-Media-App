@@ -62,8 +62,8 @@ const CommentsBox = ({ comments, refresh, isFetching }) => {
 
   return (
     <>
-      <CommentsContainer hasComments={comments.length > 0}>
-        {comments.length > 0 ? (
+      <CommentsContainer hasComments={comments?.length > 0}>
+        {comments?.length > 0 ? (
           comments.map((comment) => (
             <Comment
               key={comment._key}
