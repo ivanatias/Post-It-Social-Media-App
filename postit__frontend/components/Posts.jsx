@@ -12,18 +12,13 @@ const breakpointColumnsObj = {
   640: 1,
 };
 
-const Posts = ({ posts, refresh, isFetching }) => {
-  return (
-    <Masonry
-      className="flex w-full h-full"
-      breakpointCols={breakpointColumnsObj}
-    >
-      {posts?.map((post) => (
-        <Post key={post._id} post={post} refresh={refresh} />
-      ))}
-      {isFetching && <Loading />}
-    </Masonry>
-  );
-};
+const Posts = ({ posts, refresh, isFetching }) => (
+  <Masonry className="flex w-full h-full" breakpointCols={breakpointColumnsObj}>
+    {posts?.map((post) => (
+      <Post key={post._id} post={post} refresh={refresh} />
+    ))}
+    {isFetching && <Loading />}
+  </Masonry>
+);
 
 export default Posts;
