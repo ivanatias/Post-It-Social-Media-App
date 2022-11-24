@@ -145,7 +145,7 @@ const PostDetails = () => {
         {openModal && (
           <ConfirmModal
             postId={id}
-            toggleOpenModal={toggleOpenModal}
+            toggleModal={toggleOpenModal}
             deletePost={handleDeletePost}
           />
         )}
