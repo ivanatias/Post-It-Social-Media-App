@@ -129,7 +129,6 @@ const PostForm = ({
       await editPost({ postId: id, postTitle, postDescription, postCategory });
       toast.success("Post edited");
       refresh();
-      setEditingPostMode(false);
     } catch (err) {
       toast.error(`Error editing post: ${err.message}`);
     } finally {
