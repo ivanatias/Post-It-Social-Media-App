@@ -3,7 +3,6 @@ import React from "react";
 const SubmitButton = ({
   uploadingImage,
   creatingPost,
-  wrongImageType,
   isEditingPost,
   editingPostMode,
 }) => {
