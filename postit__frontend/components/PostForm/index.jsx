@@ -133,6 +133,7 @@ const PostForm = ({
       toast.error(`Error editing post: ${err.message}`);
     } finally {
       toggleisEditingPost();
+      toggleEditingPostMode();
     }
   };
 
