@@ -29,19 +29,31 @@ const UserProfile = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: user } = useData(["userInfo", id], fetchUser, id);
+  const { data: user } = useData({
+    queryKey: "userInfo",
+    queryFn: fetchUser,
+    id,
+  });
 
   const {
     data: postsByUser,
     isFetching: isFetchingPostsByUser,
     refetch: refetchPostsByUser,
-  } = useData(["postsByUser", id], fetchPostsByUser, id);
+  } = useData({
+    queryKey: "postsByUser",
+    queryFn: fetchPostsByUser,
+    id,
+  });
 
   const {
     data: postsSavedByUser,
     isFetching: isFetchingPostsSavedByUser,
     refetch: refetchPostsSavedByUser,
-  } = useData(["postsSavedByUser", id], fetchPostsSavedByUser, id);
+  } = useData({
+    queryKey: "postsSavedByUser",
+    queryFn: fetchPostsSavedByUser,
+    id,
+  });
 
   return (
     <Layout
@@ -49,7 +61,7 @@ const UserProfile = () => {
       ogUrl={process.env.NEXT_PUBLIC_BASEURL + router.asPath}
       ogType="article"
     >
-      <CoverImage firstPostCategory={postsByUser[0]?.category} />
+      <CoverImage firstPostCategory={postsByUser?.[0]?.category} />
       <PageWrapper>
         <User imageUrl={user?.image} username={user?.userName} />
         {user?._id === session?.user?.uid && <LogoutButton />}
