@@ -36,6 +36,7 @@ const Login = () => (
             width={140}
             height={80}
             alt="logo"
+            priority
           />
         </div>
         <button
