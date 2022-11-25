@@ -15,11 +15,11 @@ const PostsByCategory = () => {
     data: postsByCategory,
     isFetching,
     refetch,
-  } = useData(
-    ["postsByCategoryFeed", category],
-    fetchPostsByCategory,
-    category
-  );
+  } = useData({
+    queryKey: "postsByCategoryFeed",
+    queryFn: fetchPostsByCategory,
+    category,
+  });
 
   if (!session) {
     return <NotSignedIn />;
@@ -33,7 +33,7 @@ const PostsByCategory = () => {
       {isFetching && <Loading />}
       <section className="w-full px-4 py-4 md:px-8 lg:px-10">
         {postsByCategory?.length === 0 && !isFetching ? (
-          <div className="grid place-content-center py-10 w-full">
+          <div className="grid w-full py-10 place-content-center">
             <Image
               src="/empty.svg"
               width={280}
@@ -41,7 +41,7 @@ const PostsByCategory = () => {
               alt="No results"
               priority
             />
-            <p className="mt-10 text-center text-2xl 2xl:text-3xl font-bold text-white w-full">
+            <p className="w-full mt-10 text-2xl font-bold text-center text-white 2xl:text-3xl">
               Wow, so empty!
             </p>
           </div>

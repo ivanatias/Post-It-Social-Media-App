@@ -47,18 +47,18 @@ const PostDetails = () => {
     data: postDetails,
     isFetching: isFetchingPostDetails,
     refetch: refetchPostDetails,
-  } = useData(["postDetails", id], fetchPost, id);
+  } = useData({ queryKey: "postDetails", queryFn: fetchPost, id });
 
   const {
     data: postsByCategory,
     isFetching: isFetchingPostsByCategory,
     refetch: refetchPostsByCategory,
-  } = useData(
-    ["postsByCategory", id],
-    fetchPostsByCategory,
-    postDetails?.category,
-    id
-  );
+  } = useData({
+    queryKey: "postsByCategory",
+    queryFn: fetchPostsByCategory,
+    category: postDetails?.category,
+    id,
+  });
 
   const handleDeletePost = async (postId) => {
     toggleDeletingPost();

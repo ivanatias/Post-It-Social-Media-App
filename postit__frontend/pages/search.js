@@ -17,11 +17,11 @@ const Search = () => {
     data: searchPosts,
     isFetching,
     refetch,
-  } = useData(
-    ["searchPosts", debouncedSearch],
-    fetchSearchedPosts,
-    debouncedSearch
-  );
+  } = useData({
+    queryKey: "searchPosts",
+    queryFn: fetchSearchedPosts,
+    debouncedSearch,
+  });
 
   if (!session) {
     return <NotSignedIn />;
@@ -42,12 +42,12 @@ const Search = () => {
           />
         )}
         {searchPosts?.length === 0 && debouncedSearch === "" && !isFetching && (
-          <div className="text-white text-lg 2xl:text-2xl">
+          <div className="text-lg text-white 2xl:text-2xl">
             Search posts by title or some description
           </div>
         )}
         {searchPosts?.length === 0 && debouncedSearch !== "" && !isFetching && (
-          <div className="text-white text-lg 2xl:text-2xl text-center">
+          <div className="text-lg text-center text-white 2xl:text-2xl">
             No results found
           </div>
         )}

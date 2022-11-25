@@ -12,7 +12,7 @@ const Home = () => {
     data: posts,
     isFetching,
     refetch,
-  } = useData("feedPosts", fetchAllPosts);
+  } = useData({ queryKey: "feedPosts", queryFn: fetchAllPosts });
 
   return (
     <Layout>
