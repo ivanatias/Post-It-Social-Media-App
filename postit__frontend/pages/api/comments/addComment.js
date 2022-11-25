@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).end();
+
   const { postId, userId, comment } = req.body;
+
   try {
     await client
       .patch(postId)

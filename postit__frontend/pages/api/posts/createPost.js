@@ -2,8 +2,10 @@ import { client } from "../../../client/client";
 
 module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).end();
+
   const { postImage, postTitle, postDescription, postCategory, userId } =
     req.body;
+
   const doc = {
     _type: "post",
     title: postTitle,
@@ -24,6 +26,7 @@ module.exports = async (req, res) => {
     saved: [],
     comments: [],
   };
+
   try {
     await client.create(doc);
     res.status(200).json({ message: "Post succesfully created!" });

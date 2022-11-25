@@ -88,12 +88,16 @@ const UserProfile = () => {
 
 export async function getServerSideProps(context) {
   const queryClient = new QueryClient();
+
   const user = userQuery(context.params.id);
+
   const postsByUser = postsByUserQuery(context.params.id);
+
   const postsSavedByUser = postsSavedByUserQuery(context.params.id);
+
   let foundData;
 
-  await Promise.all([
+  const queriesToPrefetch = [
     queryClient.prefetchQuery(["userInfo", context.params.id], () =>
       client.fetch(user).then((data) => {
         foundData = data;
@@ -106,7 +110,9 @@ export async function getServerSideProps(context) {
     queryClient.prefetchQuery(["postsSavedByUser", context.params.id], () =>
       client.fetch(postsSavedByUser).then((data) => data)
     ),
-  ]);
+  ];
+
+  await Promise.all(queriesToPrefetch);
 
   if (foundData.length === 0) {
     return {

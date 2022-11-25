@@ -30,7 +30,9 @@ export async function getServerSideProps(context) {
     context.res,
     authOptions
   );
+
   const queryClient = new QueryClient();
+
   const query = postsQuery();
 
   const doc = {

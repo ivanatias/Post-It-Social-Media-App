@@ -156,8 +156,11 @@ const PostDetails = () => {
 
 export async function getServerSideProps(context) {
   const queryClient = new QueryClient();
+
   const post = postQuery(context.params.id);
+
   let postCategory;
+
   let foundData;
 
   await queryClient.prefetchQuery(["postDetails", context.params.id], () =>
@@ -175,6 +178,7 @@ export async function getServerSideProps(context) {
   }
 
   const postsByCategory = postsByCategoryQuery(postCategory, context.params.id);
+
   await queryClient.prefetchQuery(["postsByCategory", context.params.id], () =>
     client.fetch(postsByCategory).then((data) => data)
   );
