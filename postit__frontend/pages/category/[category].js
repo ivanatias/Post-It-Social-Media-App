@@ -1,13 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { Layout, Loading, Posts, NotSignedIn } from "../../components";
+import { Layout, Loading, Posts } from "../../components";
 import { useData } from "../../hooks/useData";
 import { useRouter } from "next/router";
 import { fetchPostsByCategory } from "../../utils/fetchers";
-import { useSession } from "next-auth/react";
 
 const PostsByCategory = () => {
-  const { data: session } = useSession();
   const router = useRouter();
   const { category } = router.query;
 
@@ -20,10 +18,6 @@ const PostsByCategory = () => {
     queryFn: fetchPostsByCategory,
     category,
   });
-
-  if (!session) {
-    return <NotSignedIn />;
-  }
 
   return (
     <Layout

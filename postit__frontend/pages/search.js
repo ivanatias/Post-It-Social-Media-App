@@ -1,14 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Context } from "../searchContext";
 import { Layout, Loading, NotSignedIn, Posts } from "../components";
 import { useData } from "../hooks/useData";
 import { useDebounce } from "../hooks/useDebounce";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import { fetchSearchedPosts } from "../utils/fetchers";
 
 const Search = () => {
-  const { data: session } = useSession();
   const { searchTerm } = useContext(Context);
   const debouncedSearch = useDebounce(searchTerm, 500);
   const router = useRouter();
@@ -22,10 +20,6 @@ const Search = () => {
     queryFn: fetchSearchedPosts,
     debouncedSearch,
   });
-
-  if (!session) {
-    return <NotSignedIn />;
-  }
 
   return (
     <Layout

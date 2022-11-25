@@ -8,7 +8,6 @@ export { default as Posts } from "./Posts";
 export { default as CommentsBox } from "./CommentsBox";
 export { default as SavedByBox } from "./SavedByBox";
 export { default as PostForm } from "./PostForm";
-export { default as NotSignedIn } from "./NotSignedIn";
 export { default as ErrorBoundary } from "./ErrorBoundary";
 export { default as ErrorFallback } from "./ErrorFallback";
 export { default as UserAvatar } from "./UserAvatar";

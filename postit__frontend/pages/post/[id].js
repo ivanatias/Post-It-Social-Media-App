@@ -24,7 +24,7 @@ import { postQuery, postsByCategoryQuery } from "../../utils/data";
 import { fetchPost, fetchPostsByCategory } from "../../utils/fetchers";
 import { useRouter } from "next/router";
 import { useToggle } from "../../hooks/useToggle";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { deletePost } from "../../services/post/deletePost";
 
@@ -155,20 +155,10 @@ const PostDetails = () => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
   const queryClient = new QueryClient();
   const post = postQuery(context.params.id);
   let postCategory;
   let foundData;
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
 
   await queryClient.prefetchQuery(["postDetails", context.params.id], () =>
     client.fetch(post).then((data) => {

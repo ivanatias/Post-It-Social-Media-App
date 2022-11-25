@@ -21,7 +21,7 @@ import {
 import { useData } from "../../hooks/useData";
 import { client } from "../../client/client";
 import { useRouter } from "next/router";
-import { useSession, getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const UserProfile = () => {
   const { data: session } = useSession();
@@ -87,21 +87,11 @@ const UserProfile = () => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
   const queryClient = new QueryClient();
   const user = userQuery(context.params.id);
   const postsByUser = postsByUserQuery(context.params.id);
   const postsSavedByUser = postsSavedByUserQuery(context.params.id);
   let foundData;
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
 
   await Promise.all([
     queryClient.prefetchQuery(["userInfo", context.params.id], () =>
