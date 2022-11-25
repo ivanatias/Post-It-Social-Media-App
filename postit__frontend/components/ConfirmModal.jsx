@@ -9,7 +9,7 @@ const ConfirmModal = ({ deletePost, postId, toggleModal }) => (
       <div className="flex items-center justify-around gap-5 mt-5">
         <button
           className="flex items-center justify-center px-5 py-2 text-sm font-semibold text-gray-200 transition duration-150 ease-in-out bg-transparent border-none outline-none cursor-pointer 2xl:text-base hover:text-white"
-          onClick={() => toggleOpenModal()}
+          onClick={() => toggleModal()}
         >
           Cancel
         </button>
