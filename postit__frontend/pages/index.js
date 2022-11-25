@@ -3,9 +3,10 @@ import { dehydrate, QueryClient } from "react-query";
 import { useData } from "../hooks/useData";
 import { Layout, Posts } from "../components";
 import { client } from "../client/client";
-import { getSession } from "next-auth/react";
+import { unstable_getServerSession } from "next-auth/next";
 import { fetchAllPosts } from "../utils/fetchers";
 import { postsQuery } from "../utils/data";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 const Home = () => {
   const {
@@ -24,18 +25,13 @@ const Home = () => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession(context);
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
   const queryClient = new QueryClient();
   const query = postsQuery();
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
 
   const doc = {
     _type: "user",
