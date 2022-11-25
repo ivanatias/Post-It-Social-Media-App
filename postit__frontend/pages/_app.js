@@ -4,7 +4,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "next-auth/react";
-import { ErrorBoundary, ErrorFallback } from "../components";
+import { ErrorBoundary } from "../components";
 
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       <Hydrate state={pageProps.dehydratedState}>
         <SearchContext>
           <SessionProvider session={session}>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <ErrorBoundary>
               <Component {...pageProps} />
             </ErrorBoundary>
           </SessionProvider>

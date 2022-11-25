@@ -1,10 +1,8 @@
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-import { useRouter } from "next/router";
 
 const ErrorFallback = ({ resetErrorState }) => {
-  const router = useRouter();
   return (
     <>
       <Head>
@@ -14,8 +12,8 @@ const ErrorFallback = ({ resetErrorState }) => {
         <link rel="icon" href="/Postit-logoicon.svg"></link>
       </Head>
 
-      <section className="h-screen grid place-content-center bg-black">
-        <div className="flex flex-col p-4 items-center justify-center sm:p-8 md:p-12 gap-5 max-w-4xl">
+      <section className="grid h-screen bg-black place-content-center">
+        <div className="flex flex-col items-center justify-center max-w-4xl gap-5 p-4 sm:p-8 md:p-12">
           <Image
             src="/Postit-logofull.svg"
             placeholder="blur"
@@ -25,13 +23,13 @@ const ErrorFallback = ({ resetErrorState }) => {
             alt="logo"
           />
           <div className="flex flex-col items-center justify-center gap-3">
-            <p className="text-white text-center text-base 2xl:text-xl font-bold">
+            <p className="text-base font-bold text-center text-white 2xl:text-xl">
               It seems there was an unexpected error on client side...
             </p>
             <button
               type="button"
-              className="w-full text-white text-sm 2xl:text-base font-bold flex items-center justify-center border-none outline-none bg-transparent"
-              onClick={() => router.reload()}
+              className="flex items-center justify-center w-full text-sm font-bold text-white bg-transparent border-none outline-none 2xl:text-base"
+              onClick={resetErrorState}
             >
               Click here to refresh the page and try again.
             </button>
