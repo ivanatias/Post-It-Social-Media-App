@@ -10,7 +10,7 @@ export const config = {
 
 export default async (req, res) => {
   const form = new formidable.IncomingForm();
-
+  
   form.keepExtensions = true;
 
   const formPromise = await new Promise((resolve, reject) => {
